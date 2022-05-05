@@ -15,5 +15,15 @@ pipeline {
                 echo 'Build successful'
             }
         }
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('Sonarqube') {
+                    
+                    withMaven(maven:'MAVEN') {
+                        sh 'mvn clean package sonar:sonar'
+                    }
+                }
+            }
+        }
     }
 }
