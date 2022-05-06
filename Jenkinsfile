@@ -25,5 +25,24 @@ pipeline {
                 }
             }
         }
+        stage('Upload war to nexus'){
+            steps{
+                nexusArtifactUploader artifacts: [
+                    [
+                        artifactId: 'Example',
+                         classifier: '', 
+                         file: 'target/Example-0.0.1.war',
+                          type: 'war'
+                    ]
+                ],
+                 credentialsId: 'nexus-cred',
+                  groupId: 'com.github.Premvikash', 
+                  nexusUrl: '20.230.244.137:8081', 
+                  nexusVersion: 'nexus3',
+                  protocol: 'http',
+                  repository: 'Nexus-poc',
+                  version: '0.0.1'
+            }
+        }
     }
 }
