@@ -53,6 +53,7 @@ pipeline {
 }
 pipeline{
     agent any
+    
     stages{
         stage('Download artifact from nexus'){
             steps{
