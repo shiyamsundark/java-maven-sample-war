@@ -28,22 +28,7 @@ jobs:
       - name: stopec2
         run: |
           aws ec2 stop-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
-          output:
-            { 
-              "StoppingInstances":[
-              {
-                  "InstanceId": "${{secrets.AWS_EC2_INSTANCE_ID }}",
-                  "CurrentState": {
-                      "Code": 64,
-                      "Name":"stopping"
-                  },
-                  "PreviousState":{
-                       "Code":16,
-                       "Name":"running"
-                    }
-                 }
-              ]  
-           }   
+           
   
       
   
