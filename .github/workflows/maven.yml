@@ -22,12 +22,29 @@ jobs:
       - name: waiting ec2 to start
         run: |
           sleep 60
-  build:
-    runs-on: self-hosted
+  stopawsec2:
+    runs-on: ubuntu-latest
     steps:
-      - name: maven build
+      - name: stopec2
         run: |
-          echo "Hello world"
+          aws ec2 stop-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
+          output:
+            { 
+              "StoppingInstances":[
+              {
+                  "InstanceId": "${{secrets.AWS_EC2_INSTANCE_ID }}",
+                  "CurrentState": {
+                      "Code": 64,
+                      "Name":"stopping"
+                  },
+                  "PreviousState":{
+                       "Code":16,
+                       "Name":"running"
+                    }
+                 }
+              ]  
+           }   
+  
       
   
     
