@@ -22,6 +22,14 @@ jobs:
       - name: waiting ec2 to start
         run: |
           sleep 60
+          
+  checkec2status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checking status of ec2
+        run: |
+          aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }}
+          
   stopawsec2:
     runs-on: ubuntu-latest
     steps:
