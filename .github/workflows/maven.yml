@@ -21,14 +21,13 @@ jobs:
     steps:
       - name: waiting ec2 to start
         run: |
-          sleep 20
+          sleep 50
   connecttorunner:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: connecttoec2
         run: |
-          echo Hello world
-          echo pwd
+          ssh -i ${{ secrets.AWS_KEY }} ubuntu@ec2-54-193-193-183.us-west-1.compute.amazonaws.com
       
   
     
