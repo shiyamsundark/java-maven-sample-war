@@ -32,22 +32,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}  
-         #output:
-          #{
-          #  "StoppingInstances": [
-          #{
-           #  "InstanceId": "i-1234567890abcdef0",
-            # "CurrentState": {
-             #    "Code": 64,
-             #    "Name": "stopping"
-             #},
-             #"PreviousState": {
-              #   "Code": 16,
-               #  "Name": "running"
-               #   }
-              #  }
-             #]
-          #}
+         
+             
    
            
   
