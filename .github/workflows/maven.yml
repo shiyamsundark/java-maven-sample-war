@@ -29,6 +29,8 @@ jobs:
       - name: checking status of ec2
         run: |
           aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }}
+        env:
+           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
           
   stopawsec2:
     runs-on: ubuntu-latest
