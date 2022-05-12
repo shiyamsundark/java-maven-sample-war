@@ -42,7 +42,7 @@ jobs:
   teststatus:
     needs: checkec2status
     runs-on: ubuntu-latest
-    if: ${{ status != "running"}}
+    if: status != "running"
     steps:
       - run: exit1
     
