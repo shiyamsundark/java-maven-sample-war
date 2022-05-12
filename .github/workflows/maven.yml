@@ -51,6 +51,10 @@ jobs:
         if: ${{needs.Check-ec2-Status.outputs.output1 != 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}  
           
       - name: isrunner2running
         if: ${{needs.Check-ec2-Status.outputs.output2 == 'running'}}
@@ -60,6 +64,10 @@ jobs:
         if: ${{needs.Check-ec2-Status.outputs.output2 != 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID2 }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
           
       - name: isrunner3running
         if: ${{needs.Check-ec2-Status.outputs.output2 == 'running'}}
