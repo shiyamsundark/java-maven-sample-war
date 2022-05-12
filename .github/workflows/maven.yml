@@ -6,20 +6,67 @@ on:
   workflow_dispatch:
 
 jobs:
+  Check-ec2-Status:
+    #needs: sleep-ec2
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.step1.outputs.STATUS1 }}
+      output2: ${{ steps.step1.outputs.STATUS2 }}
+      output3: ${{ steps.step1.outputs.STATUS3 }}
+    
+    steps:
+      - id: Checking status of runner1
+        run: |
+          status1=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
+          echo "::set-output name=STATUS1::$status1"
+          status2=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID2 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
+          echo "::set-output name=STATUS2::$status2"
+          status3=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID3 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
+          echo "::set-output name=STATUS3::$status3"
+    
+        env:
+           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+           
   startawsec2:
+    needs: Check-ec2-Status
     runs-on: ubuntu-latest
     steps:
-      - name: startec2
+      - name: isrunner1running
+        if: ${{needs.Check-ec2-Status.outputs.output1 == 'running'}}
         run: |
+          echo "Moving to next"
+      - name: isrunner1stopped     
+        if: ${{needs.Check-ec2-Status.outputs.output1 == 'stopped'}}
+        run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
+          
+      - name: isrunner2running
+        if: ${{needs.Check-ec2-Status.outputs.output2 == 'running'}}
+        run: |
+          echo "Moving to next"
+      - name: isrunner2stopped     
+        if: ${{needs.Check-ec2-Status.outputs.output2 == 'stopped'}}
+        run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID2 }}
+          
+      - name: isrunner3running
+        if: ${{needs.Check-ec2-Status.outputs.output2 == 'running'}}
+        run: |
+          echo "Moving to next"
+      - name: isrunner3stopped     
+        if: ${{needs.Check-ec2-Status.outputs.output3 == 'stopped'}}
+        run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
+          
+          
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
   sleep-ec2:
-    needs: startawsec2
+    #needs: startawsec2
     runs-on: ubuntu-latest
     steps:
       - name: waiting ec2 to start
@@ -27,23 +74,6 @@ jobs:
         run: |
           sleep 60
           
-  Check-ec2-Status:
-    needs: sleep-ec2
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checking status of EC2
-        run: |
-          status1=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
-          status2=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID2 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
-          status3=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID3 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
-          echo "STATUS1=$status1"
-          echo "STATUS2=$status2"
-          echo "STATUS3=$status3"
-      
-        env:
-           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
          
         
     
