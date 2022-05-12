@@ -28,23 +28,26 @@ jobs:
   checkec2status:
 #    needs: sleep-ec2
     runs-on: ubuntu-latest
+    outputs:
+      my-key: ${{ steps.mykey.outputs.defined }}
     steps:
       - name: checking status of ec2
         run: |
           status=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
           echo "STATUS=$status"
+          echo "::set-output name=defined::$status"
       
         env:
            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
            AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+         
           
   teststatus:
     needs: checkec2status
     runs-on: ubuntu-latest
-    if: status != "running"
     steps:
-      - run: exit1
+      - run: echo ${{ needs.checkec2status.outputs.mykey }}
     
 #  stopawsec2:
 #    needs: checkec2status
