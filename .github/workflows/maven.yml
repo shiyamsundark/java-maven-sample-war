@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: checking status of ec2
         run: |
-          status=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq '.InstanceStatuses.AvailabilityZone' )
+          status=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq '.InstanceStatuses.[AvailabilityZone]' )
           echo "STATUS=$status" 
         env:
            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
