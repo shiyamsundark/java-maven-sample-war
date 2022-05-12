@@ -34,8 +34,8 @@ jobs:
       - name: Checking status of EC2
         run: |
           status1=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
-          status2=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
-          status3=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
+          status2=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID2 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
+          status3=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID3 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
       
         env:
            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
