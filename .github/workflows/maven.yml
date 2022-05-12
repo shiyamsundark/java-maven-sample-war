@@ -34,7 +34,7 @@ jobs:
       - name: checking status of ec2
         run: |
           status=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
-          echo "STATUS=$status"
+          #echo "STATUS=$status"
           echo "::set-output name=defined::$status"
       
         env:
