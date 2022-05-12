@@ -7,7 +7,6 @@ on:
 
 jobs:
   Check-ec2-Status:
-    #needs: sleep-ec2
     runs-on: ubuntu-latest
     outputs:
       output1: ${{ steps.step1.outputs.STATUS1 }}
@@ -19,8 +18,12 @@ jobs:
         run: |
           status1=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
           echo "::set-output name=STATUS1::$status1"
+      - id: Checking status of runner2
+        run: |
           status2=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID2 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
           echo "::set-output name=STATUS2::$status2"
+      - id: Checking status of runner3
+        run: |
           status3=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID3 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
           echo "::set-output name=STATUS3::$status3"
     
@@ -66,7 +69,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
   sleep-ec2:
-    #needs: startawsec2
+    needs: startawsec2
     runs-on: ubuntu-latest
     steps:
       - name: waiting ec2 to start
