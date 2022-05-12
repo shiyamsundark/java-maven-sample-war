@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: checking status of ec2
         run: |
-          status=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq '.[0].Name' )
+          status=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq '.[0]' )
           echo "STATUS=$status" 
         env:
            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
