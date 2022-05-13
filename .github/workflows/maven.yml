@@ -87,12 +87,12 @@ jobs:
           sleep 60
           
   build:
-     needs: startawsec2
-     runs-on: ubuntu-latest
+     needs: [sleep-ec2, startawsec2]
+     runs-on: [self-hosted, "${{ needs.steps.runnerstep3.outputs.runneroutput }}"]
      steps:
        - name: build step
-         run: echo ${{needs.startawsec2.outputs.runneroutput}}
-           
+         #run: echo ${{needs.startawsec2.outputs.runneroutput}}
+         run: echo "Hello World" 
                
 #  stopawsec2:
 #    needs: checkec2status
