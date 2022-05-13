@@ -98,23 +98,23 @@ jobs:
         run: |
           sleep 60
           
-  build:
+  #build:
    #  needs: [sleep-ec2, startawsec2]
-     runs-on: "${{ needs.steps.runnerstep3.outputs.runneroutput }}"
-     steps:
-       - name: build step
-         #run: echo ${{needs.startawsec2.outputs.runneroutput}}
-         run: echo "Hello World" 
+   #  runs-on: "${{ needs.steps.runnerstep3.outputs.runneroutput }}"
+   #  steps:
+   #    - name: build step
+   #      #run: echo ${{needs.startawsec2.outputs.runneroutput}}
+   #      run: echo "Hello World" 
                
-  stopawsec2:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: stopec2
-        run: |
-          aws ec2 stop-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
-          aws ec2 stop-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID2 }}
-          aws ec2 stop-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
+  #stopawsec2:
+  #  needs: build
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: stopec2
+  #      run: |
+  #        aws ec2 stop-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
+  #        aws ec2 stop-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID2 }}
+  #        aws ec2 stop-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
          
          
              
