@@ -84,7 +84,7 @@ jobs:
           
   build:
      needs: [sleep-ec2,startawsec2]
-     runs-on: ${{ needs.startawsec2.outputs.runner }}
+     runs-on: ${{ needs.startawsec2.outputs.runneroutput }}
      steps:
        - name: build step
          run: echo 'This is build step'
