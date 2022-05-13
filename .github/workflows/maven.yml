@@ -12,12 +12,16 @@ env:
           
 jobs:
   idfromfile:
-    runs-on: ubuntu-latest
-    steps: 
-      - id: idstep1
-        run: | 
-          content=`cat ./java-maven-sample-war/InstanceID.txt`
-          echo "::set-output name=InstanceID::$content"
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      -  run: |
+           cd GITHUB_WORKSPACE/
+           ls -la
+      #- id: idstep1
+      #  run: | 
+         # content=`cat ./java-maven-sample-war/InstanceID.txt`
+         # echo "::set-output name=InstanceID::$content"
           
   #Check-ec2-Status:
     #runs-on: ubuntu-latest
