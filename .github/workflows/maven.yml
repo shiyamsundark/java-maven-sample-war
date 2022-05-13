@@ -84,10 +84,11 @@ jobs:
           
   build:
      needs: [sleep-ec2,startawsec2]
-     runs-on: ${{ needs.startawsec2.outputs.runneroutput }}
+     runs-on: ubuntu-latest
      steps:
        - name: build step
-         run: echo 'This is build step'
+         run: echo ${{needs.startawsec2.outputs.runneroutput}}
+           
                
 #  stopawsec2:
 #    needs: checkec2status
