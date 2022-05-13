@@ -60,7 +60,7 @@ jobs:
         if: ${{needs.Check-ec2-Status.outputs.output2 != 'running' && needs.Check-ec2-Status.outputs.output1 == 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID2 }}
-          SET_RUNNER= "self-hosted2"
+          echo "::set-output name=runner::self-hosted2"
     
           
       - name: isrunner3running
