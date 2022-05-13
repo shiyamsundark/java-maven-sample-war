@@ -87,7 +87,7 @@ jobs:
           sleep 60
           
   build:
-     needs: startawsec2
+     needs: [sleep-ec2,startawsec2]
      runs-on: [self-hosted, "${{ needs.startawsec2.outputs.runner }}"]
      steps:
        - name: build step
