@@ -87,7 +87,7 @@ jobs:
           sleep 60
           
   build:
-     needs: [sleep-ec2,startawsec2]
+     needs: startawsec2
      runs-on: ubuntu-latest
      steps:
        - name: build step
