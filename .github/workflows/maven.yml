@@ -16,7 +16,7 @@ jobs:
     steps: 
       - id: idstep1
         run: | 
-          content=`cat ./InstanceID.txt`
+          content=`cat ./java-maven-sample-war/InstanceID.txt`
           echo "::set-output name=InstanceID::$content"
           
   #Check-ec2-Status:
