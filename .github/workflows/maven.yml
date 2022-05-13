@@ -23,28 +23,28 @@ jobs:
           content=`cat InstanceID.txt`
           echo "::set-output name=InstanceID::$content"
           
-  #Check-ec2-Status:
-    #runs-on: ubuntu-latest
-    #outputs:
-      #output1: ${{ steps.step1.outputs.STATUS1 }}
-      #output2: ${{ steps.step2.outputs.STATUS2 }}
-      #output3: ${{ steps.step3.outputs.STATUS3 }} 
+  Check-ec2-Status:
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.step1.outputs.STATUS1 }}
+      output2: ${{ steps.step2.outputs.STATUS2 }}
+      output3: ${{ steps.step3.outputs.STATUS3 }} 
     
-    #steps:
-     # - id: step1
-     #   run: |
-     #     status1=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
-     #     echo "::set-output name=STATUS1::$status1"
-     #       
+    steps:
+      - id: step1
+        run: |
+          status1=$( aws ec2 describe-instance-status --instance-id $content | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
+          echo "::set-output name=STATUS1::$status1"
+            
      # - id: step2
-     #   run: |
-     #     status2=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID2 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
-     #     echo "::set-output name=STATUS2::$status2"
+      #  run: |
+       #   status2=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID2 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
+        #  echo "::set-output name=STATUS2::$status2"
         
      # - id: step3
-     #   run: |
-     #     status3=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID3 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
-     #     echo "::set-output name=STATUS3::$status3"  
+      #  run: |
+      #    status3=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID3 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
+       #   echo "::set-output name=STATUS3::$status3"  
            
  # startawsec2:
  #   needs: Check-ec2-Status
