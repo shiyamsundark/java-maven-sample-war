@@ -35,6 +35,11 @@ jobs:
         run: |
           status1=$( aws ec2 describe-instance-status --instance-id $content | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
           echo "::set-output name=STATUS1::$status1"
+      - id: displaystatus1
+        run: |  
+         echo "The status of runner1 ${{ steps.displaystatus1.outputs.STATUS1 }}"
+         
+       
             
      # - id: step2
       #  run: |
