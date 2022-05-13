@@ -45,7 +45,7 @@ jobs:
         if: ${{needs.Check-ec2-Status.outputs.output1 != 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
-          env.SET_RUNNER:selfhosted1
+          SET_RUNNER=selfhosted1
          
          
       - name: isrunner2running
@@ -56,7 +56,7 @@ jobs:
         if: ${{needs.Check-ec2-Status.outputs.output2 != 'running' && needs.Check-ec2-Status.outputs.output1 == 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID2 }}
-          env.SET_RUNNER:selfhosted2
+          SET_RUNNER=selfhosted2
     
           
       - name: isrunner3running
@@ -79,7 +79,7 @@ jobs:
           
   build:
      needs: sleep-ec2
-     runs-on: $SET_RUNNER
+     runs-on: SET_RUNNER
      steps:
        - name: build step
          run: echo 'This is build step'
