@@ -9,13 +9,14 @@ env:
            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
            AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
            SET_RUNNER: ''
+          
 jobs:
   Check-ec2-Status:
     runs-on: ubuntu-latest
     outputs:
       output1: ${{ steps.step1.outputs.STATUS1 }}
       output2: ${{ steps.step2.outputs.STATUS2 }}
-      output3: ${{ steps.step3.outputs.STATUS3 }}
+      output3: ${{ steps.step3.outputs.STATUS3 }} 
     
     steps:
       - id: step1
@@ -36,6 +37,9 @@ jobs:
   startawsec2:
     needs: Check-ec2-Status
     runs-on: ubuntu-latest
+    outputs:
+      runneroutput: ${{ steps.runnerstep3.outputs.runner }}
+      
     steps:
       - name: isrunner1running
         if: ${{needs.Check-ec2-Status.outputs.output1 == 'running'}}
@@ -60,6 +64,7 @@ jobs:
     
           
       - name: isrunner3running
+        id: runnerstep3
         if: ${{needs.Check-ec2-Status.outputs.output2 == 'running'}}
         run: |
           echo "Moving to next"
@@ -67,7 +72,7 @@ jobs:
         if: ${{needs.Check-ec2-Status.outputs.output3 != 'running' && needs.Check-ec2-Status.outputs.output2 == 'running' && needs.Check-ec2-Status.outputs.output1 == 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
-          SET_RUNNER= "self-hosted3"
+          echo "::set-output name=runner::self-hosted3"
                
   sleep-ec2:
     needs: startawsec2
@@ -78,8 +83,8 @@ jobs:
           sleep 60
           
   build:
-     needs: sleep-ec2
-     runs-on: $SET_RUNNER 
+     needs: [sleep-ec2,startawsec2]
+     runs-on: ${{ needs.startawsec2.outputs.runner }}
      steps:
        - name: build step
          run: echo 'This is build step'
