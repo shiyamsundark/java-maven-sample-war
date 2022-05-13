@@ -68,11 +68,15 @@ jobs:
         if: ${{needs.Check-ec2-Status.outputs.output2 == 'running'}}
         run: |
           echo "Moving to next"
-      - name: isrunner3stopped     
+      - name: isrunner3stopped  
+        
         if: ${{needs.Check-ec2-Status.outputs.output3 != 'running' && needs.Check-ec2-Status.outputs.output2 == 'running' && needs.Check-ec2-Status.outputs.output1 == 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
           echo "::set-output name=runner::self-hosted3"
+        id: testid
+      - name: Get runner
+        run: echo "The runner is ${{ steps.testid.outputs.runner}}"
                
   sleep-ec2:
     needs: startawsec2
