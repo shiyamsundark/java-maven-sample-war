@@ -76,7 +76,7 @@ jobs:
           echo "::set-output name=runner::self-hosted3"
         id: testid
       - name: Get runner
-        run: echo "The runner is ${{ steps.testid.outputs.runner}}"
+        run: echo "The runner is ${{ steps.testid.outputs.runner }}"
                
   sleep-ec2:
     needs: startawsec2
