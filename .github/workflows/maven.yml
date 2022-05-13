@@ -51,7 +51,7 @@ jobs:
         run: |
           echo "Moving to next"
       - name: isrunner2stopped     
-        if: ${{needs.Check-ec2-Status.outputs.output2 != 'running'}}
+        if: ${{needs.Check-ec2-Status.outputs.output2 != 'running' && needs.Check-ec2-Status.outputs.output1 == 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID2 }}
     
@@ -61,7 +61,7 @@ jobs:
         run: |
           echo "Moving to next"
       - name: isrunner3stopped     
-        if: ${{needs.Check-ec2-Status.outputs.output3 != 'running'}}
+        if: ${{needs.Check-ec2-Status.outputs.output3 != 'running' && needs.Check-ec2-Status.outputs.output2 == 'running' && needs.Check-ec2-Status.outputs.output1 == 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
                
