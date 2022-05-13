@@ -67,7 +67,7 @@ jobs:
         if: ${{needs.Check-ec2-Status.outputs.output3 != 'running' && needs.Check-ec2-Status.outputs.output2 == 'running' && needs.Check-ec2-Status.outputs.output1 == 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
-          SET_RUNNER:selfhosted3
+          SET_RUNNER=selfhosted3
                
   sleep-ec2:
     needs: startawsec2
