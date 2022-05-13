@@ -79,7 +79,7 @@ jobs:
           
   build:
      needs: sleep-ec2
-     runs-on: ${{ env.SET_RUNNER }}
+     runs-on: $SET_RUNNER 
      steps:
        - name: build step
          run: echo 'This is build step'
