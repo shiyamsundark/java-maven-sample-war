@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       -  run: |
-           cd GITHUB_WORKSPACE/
+           cd /home/ubuntu/actions-runner/_work/java-maven-sample-war/java-maven-sample-war
            ls -la
       #- id: idstep1
       #  run: | 
