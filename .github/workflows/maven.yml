@@ -4,7 +4,10 @@
 name: Java CI with Maven
 on: 
   workflow_dispatch:
-
+env:
+           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
 jobs:
   Check-ec2-Status:
     runs-on: ubuntu-latest
@@ -18,26 +21,26 @@ jobs:
         run: |
           status1=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
           echo "::set-output name=STATUS1::$status1"
-        env:
-           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}    
+        #env:
+           #AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           #AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           #AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}    
       - id: step2
         run: |
           status2=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID2 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
           echo "::set-output name=STATUS2::$status2"
-        env:
-           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}  
+        #env:
+           #AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           #AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           #AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}  
       - id: step3
         run: |
           status3=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID3 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
           echo "::set-output name=STATUS3::$status3"  
-        env:
-           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+        #env:
+           #AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           #AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           #AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
            
   startawsec2:
     needs: Check-ec2-Status
@@ -51,10 +54,10 @@ jobs:
         if: ${{needs.Check-ec2-Status.outputs.output1 != 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}  
+        #env:
+          #AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          #AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}  
           
       - name: isrunner2running
         if: ${{needs.Check-ec2-Status.outputs.output2 == 'running'}}
@@ -64,10 +67,10 @@ jobs:
         if: ${{needs.Check-ec2-Status.outputs.output2 != 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID2 }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+        #env:
+          #AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          #AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
           
       - name: isrunner3running
         if: ${{needs.Check-ec2-Status.outputs.output2 == 'running'}}
@@ -77,12 +80,11 @@ jobs:
         if: ${{needs.Check-ec2-Status.outputs.output3 != 'running'}}
         run: |         
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
-          
-          
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+               
+        #env:
+          #AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          #AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
   sleep-ec2:
     needs: startawsec2
     runs-on: ubuntu-latest
@@ -91,9 +93,7 @@ jobs:
       
         run: |
           sleep 60
-          
-         
-        
+               
     
 #  stopawsec2:
 #    needs: checkec2status
