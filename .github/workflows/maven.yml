@@ -88,10 +88,10 @@ jobs:
           
   build:
      needs: startawsec2
-     runs-on: ubuntu-latest
+     runs-on: [self-hosted, "${{ needs.startawsec2.outputs.runner }}"]
      steps:
        - name: build step
-         run: echo ${{needs.startawsec2.outputs.runneroutput}}
+         run: echo "Hello World"
            
                
 #  stopawsec2:
