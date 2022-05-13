@@ -11,75 +11,83 @@ env:
            SET_RUNNER: ''
           
 jobs:
-  Check-ec2-Status:
+  idfromfile:
     runs-on: ubuntu-latest
-    outputs:
-      output1: ${{ steps.step1.outputs.STATUS1 }}
-      output2: ${{ steps.step2.outputs.STATUS2 }}
-      output3: ${{ steps.step3.outputs.STATUS3 }} 
+    steps: 
+      - id: idstep1
+        run: | 
+          content=`cat ./InstanceID.txt`
+          echo "::set-output name=InstanceID::$content"
+          
+  #Check-ec2-Status:
+    #runs-on: ubuntu-latest
+    #outputs:
+      #output1: ${{ steps.step1.outputs.STATUS1 }}
+      #output2: ${{ steps.step2.outputs.STATUS2 }}
+      #output3: ${{ steps.step3.outputs.STATUS3 }} 
     
-    steps:
-      - id: step1
-        run: |
-          status1=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
-          echo "::set-output name=STATUS1::$status1"
-            
-      - id: step2
-        run: |
-          status2=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID2 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
-          echo "::set-output name=STATUS2::$status2"
+    #steps:
+     # - id: step1
+     #   run: |
+     #     status1=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
+     #     echo "::set-output name=STATUS1::$status1"
+     #       
+     # - id: step2
+     #   run: |
+     #     status2=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID2 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
+     #     echo "::set-output name=STATUS2::$status2"
         
-      - id: step3
-        run: |
-          status3=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID3 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
-          echo "::set-output name=STATUS3::$status3"  
+     # - id: step3
+     #   run: |
+     #     status3=$( aws ec2 describe-instance-status --instance-id ${{secrets.AWS_EC2_INSTANCE_ID3 }} | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
+     #     echo "::set-output name=STATUS3::$status3"  
            
-  startawsec2:
-    needs: Check-ec2-Status
-    runs-on: ubuntu-latest
-    outputs:
-      runneroutput: ${{ steps.runnerstep3.outputs.runner }}
+ # startawsec2:
+ #   needs: Check-ec2-Status
+ #   runs-on: ubuntu-latest
+ #   outputs:
+ #     runneroutput: ${{ steps.runnerstep3.outputs.runner }}
       
-    steps:
-      - name: isrunner1running
-        if: ${{needs.Check-ec2-Status.outputs.output1 == 'running'}}
-        run: |
-          echo "Moving to next"
-      - name: isrunner1stopped     
-        if: ${{needs.Check-ec2-Status.outputs.output1 != 'running'}}
-        run: |         
-          aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
-          SET_RUNNER= "self-hosted"
+ #   steps:
+ #     - name: isrunner1running
+ #       if: ${{needs.Check-ec2-Status.outputs.output1 == 'running'}}
+ #       run: |
+ #         echo "Moving to next"
+ #     - name: isrunner1stopped     
+ #       if: ${{needs.Check-ec2-Status.outputs.output1 != 'running'}}
+ #       run: |         
+ #         aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
+ #         SET_RUNNER= "self-hosted"
          
          
-      - name: isrunner2running
-        if: ${{needs.Check-ec2-Status.outputs.output2 == 'running'}}
-        run: |
-          echo "Moving to next"
-      - name: isrunner2stopped     
-        if: ${{needs.Check-ec2-Status.outputs.output2 != 'running' && needs.Check-ec2-Status.outputs.output1 == 'running'}}
-        run: |         
-          aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID2 }}
-          echo "::set-output name=runner::self-hosted2"
+#      - name: isrunner2running
+#        if: ${{needs.Check-ec2-Status.outputs.output2 == 'running'}}
+#        run: |
+#          echo "Moving to next"
+#      - name: isrunner2stopped     
+#        if: ${{needs.Check-ec2-Status.outputs.output2 != 'running' && needs.Check-ec2-Status.outputs.output1 == 'running'}}
+#        run: |         
+#          aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID2 }}
+#          echo "::set-output name=runner::self-hosted2"
     
           
-      - name: isrunner3running
-        id: runnerstep3
-        if: ${{needs.Check-ec2-Status.outputs.output2 == 'running'}}
-        run: |
-          echo "Moving to next"
-      - name: isrunner3stopped  
+#      - name: isrunner3running
+#        id: runnerstep3
+#        if: ${{needs.Check-ec2-Status.outputs.output2 == 'running'}}
+#        run: |
+#          echo "Moving to next"
+#      - name: isrunner3stopped  
         
-        if: ${{needs.Check-ec2-Status.outputs.output3 != 'running' && needs.Check-ec2-Status.outputs.output2 == 'running' && needs.Check-ec2-Status.outputs.output1 == 'running'}}
-        run: |         
-          aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
-          echo "::set-output name=runner::self-hosted3"
-        id: testid
-      - name: Get runner
-        run: echo "The runner is ${{ steps.testid.outputs.runner }}"
+ #       if: ${{needs.Check-ec2-Status.outputs.output3 != 'running' && needs.Check-ec2-Status.outputs.output2 == 'running' && needs.Check-ec2-Status.outputs.output1 == 'running'}}
+ #       run: |         
+ #         aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
+ #         echo "::set-output name=runner::self-hosted3"
+ #       id: testid
+ #     - name: Get runner
+ #       run: echo "The runner is ${{ steps.testid.outputs.runner }}"
                
   sleep-ec2:
-    needs: startawsec2
+   # needs: startawsec2
     runs-on: ubuntu-latest
     steps:
       - name: waiting ec2 to start
@@ -87,7 +95,7 @@ jobs:
           sleep 60
           
   build:
-     needs: [sleep-ec2, startawsec2]
+   #  needs: [sleep-ec2, startawsec2]
      runs-on: "${{ needs.steps.runnerstep3.outputs.runneroutput }}"
      steps:
        - name: build step
