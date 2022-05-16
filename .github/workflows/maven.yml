@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       output: ${{ steps.readid.outputs.STATUS }}
+      runner: ${{ steps.readid.outputs.runnermachine }}
     steps:
       - uses: actions/checkout@v3
       - id: readid
@@ -25,6 +26,7 @@ jobs:
              status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
              if [ "$status" != "running" ];then
                aws ec2 start-instances --instance-ids $line
+               echo "::set-output name=runnermachine::$line"
                break
              fi
            done < "$input"
