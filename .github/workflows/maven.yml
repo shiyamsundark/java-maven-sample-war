@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v3
       - id: readid
         run: |
-           input="/home/ubuntu/actions-runner/_work/java-maven-sample-war/java-maven-sample-war/InstanceID.txt"
+           input="GITHUB_WORKSPACE/InstanceID.txt"
            while IFS= read -r line
            do
              aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name' 
