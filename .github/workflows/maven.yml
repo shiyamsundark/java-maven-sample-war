@@ -24,17 +24,18 @@ jobs:
            echo "::set-output name=InstanceID::$content"
            echo $content
           
-  #Check-ec2-Status:
-   # runs-on: ubuntu-latest
-    #outputs:
-    #  output1: ${{ steps.step1.outputs.STATUS1 }}
-     # output2: ${{ steps.step2.outputs.STATUS2 }}
-      #output3: ${{ steps.step3.outputs.STATUS3 }} 
-    
-    #steps:
-     # - id: step1
-      #  run: |
-       #   status1=$( aws ec2 describe-instance-status --instance-id $content | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
+  Check-ec2-Status:
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.step1.outputs.STATUS1 }}
+      output2: ${{ steps.step2.outputs.STATUS2 }}
+      output3: ${{ steps.step3.outputs.STATUS3 }} 
+    steps:
+      - id: displaycontent
+        run: echo $content
+      #- id: step1
+       # run: |
+        #  status1=$( aws ec2 describe-instance-status --instance-id $content | jq -r '.InstanceStatuses[] | .InstanceState | .Name' )
        #   echo "::set-output name=STATUS1::$status1"
       #- id: displaystatus1
       #  run: |  
