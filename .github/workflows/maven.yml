@@ -11,7 +11,7 @@ env:
            
           
 jobs:
-  idfromfile:
+  startrunner:
     runs-on: ubuntu-latest
     outputs:
       output: ${{ steps.readid.outputs.STATUS }}
@@ -34,7 +34,7 @@ jobs:
  
                
   sleep-ec2:
-    needs: idfromfile
+    needs: startrunner
     runs-on: ubuntu-latest
     steps:
       - name: waiting ec2 to start
@@ -42,7 +42,7 @@ jobs:
           sleep 60
           
   build:
-     needs: [idfromfile,sleep-ec2]
+     needs: [startrunner,sleep-ec2]
      runs-on: "${{ needs.steps.idfromfile.outputs.runnermachine }}"
      steps:
        - name: build step
