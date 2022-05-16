@@ -18,6 +18,8 @@ jobs:
       -  run: |
            cd /home/ubuntu/actions-runner/_work/java-maven-sample-war/java-maven-sample-war
            ls -la
+      - id: displaycontent
+        run: |      
            content="$(cat /home/ubuntu/actions-runner/_work/java-maven-sample-war/java-maven-sample-war/InstanceID.txt)"
            echo "::set-output name=InstanceID::$content"
            echo $content
