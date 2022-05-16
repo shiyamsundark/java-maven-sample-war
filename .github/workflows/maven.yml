@@ -62,9 +62,7 @@ jobs:
               aws ec2 stop-instances --instance-ids $line
             done < "$input"
   
-  #        aws ec2 stop-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
-  #        aws ec2 stop-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID2 }}
-  #        aws ec2 stop-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
+
          
          
              
