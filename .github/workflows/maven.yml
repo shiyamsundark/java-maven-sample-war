@@ -53,6 +53,7 @@ jobs:
     needs: [sleep-ec2]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: stopec2
         run: |
             input='${{ github.workspace }}/InstanceID.txt'
