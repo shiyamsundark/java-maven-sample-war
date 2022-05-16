@@ -13,9 +13,7 @@ env:
 jobs:
   idfromfile:
     runs-on: self-hosted
-    
     steps:
-      
       - uses: actions/checkout@v3
       -  run: |
            cd /home/ubuntu/actions-runner/_work/java-maven-sample-war/java-maven-sample-war
@@ -25,10 +23,6 @@ jobs:
           content="$(cat /home/ubuntu/actions-runner/_work/java-maven-sample-war/java-maven-sample-war/InstanceID.txt)"
           echo "::set-output name=InstanceID::$content"
           echo $content
-     # - id: contentid
-      #  name: displaycontent
-       # run: echo "The content is ${{ steps.contentid.outputs.InstanceID }}"
-          
           
   #Check-ec2-Status:
    # runs-on: ubuntu-latest
