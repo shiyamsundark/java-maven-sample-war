@@ -13,6 +13,8 @@ env:
 jobs:
   idfromfile:
     runs-on: ubuntu-latest
+    outputs:
+      output: ${{ steps.readid.outputs.STATUS }}
     steps:
       - uses: actions/checkout@v3
       - id: readid
@@ -20,7 +22,11 @@ jobs:
            input='${{ github.workspace }}/InstanceID.txt'
            while IFS= read -r line
            do
-             aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name' 
+             status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
+             if [ "$status" != "running" ];then
+               aws ec2 start-instances --instance-ids $line
+               break
+             fi
            done < "$input"
           
   #Check-ec2-Status:
