@@ -15,7 +15,8 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-      -  run: |
+      - id: readid
+        run: |
            input="/home/ubuntu/actions-runner/_work/java-maven-sample-war/java-maven-sample-war/InstanceID.txt"
            while IFS= read -r line
            do
