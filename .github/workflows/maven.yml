@@ -20,6 +20,7 @@ jobs:
       - id: readid
         run: |
            input= ${{secrets.inspasspar}}
+           echo $input
            while IFS= read -r line
            do
              status=$(aws ec2 describe-instance-status --instance-id)
