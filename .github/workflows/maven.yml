@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v3
       - id: readid
         run: |
-           input= ${{secret.inspasspar}}
+           input= ${{secrets.inspasspar}}
            while IFS= read -r line
            do
              status=$(aws ec2 describe-instance-status --instance-id)
