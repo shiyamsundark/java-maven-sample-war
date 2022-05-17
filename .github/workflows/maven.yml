@@ -38,13 +38,13 @@ jobs:
         run: |
           sleep 60
           
-  build:
-     needs: [startrunner,sleep-ec2]
-     runs-on: ubuntu-latest
-     steps:
-       - name: build step
-         run: echo ${{needs.startawsec2.outputs.runneroutput}}
-         #run: echo "Hello World" 
+#   build:
+#      needs: [startrunner,sleep-ec2]
+#      runs-on: ubuntu-latest
+#      steps:
+#        - name: build step
+#          run: echo ${{needs.startawsec2.outputs.runneroutput}}
+#          #run: echo "Hello World" 
                
   #stopawsec2:
     #needs: [sleep-ec2]
