@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v3
       - id: readid
         run: |
-           input= ${{secrets.inspasspar}}
+           input= ${{github.workspace}}/${{secrets.inspasspar}}
            echo $input
            while IFS= read -r line
            do
