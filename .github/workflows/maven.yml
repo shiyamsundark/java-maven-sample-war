@@ -17,19 +17,20 @@ jobs:
     #outputs:
       #runner: ${{ steps.readid.outputs.runnermachine }}   
     steps:
-      - uses: actions/checkout@v3
-      - id: readid
-        run: |
-           input='${{ secrets.ID_PATH }}'
-           while IFS= read -r line
-           do
-             status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
-             if [ "$status" != "running" ];then
-               aws ec2 start-instances --instance-ids $line
-               echo $line > id.txt   
-               break
-             fi
-           done < "$input"
+      - run: echo ${{ secrets.ID_PATH }}
+#       - uses: actions/checkout@v3
+#       - id: readid
+#         run: |
+#            input='${{ secrets.ID_PATH }}'
+#            while IFS= read -r line
+#            do
+#              status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
+#              if [ "$status" != "running" ];then
+#                aws ec2 start-instances --instance-ids $line
+#                echo $line > id.txt   
+#                break
+#              fi
+#            done < "$input"
 #       - name: Upload math result for job 1
 #         uses: actions/upload-artifact@v3
 #         with:
