@@ -53,7 +53,7 @@ jobs:
           name: id
       - shell: bash
         run: |
-          TEST_ID=`cat id.txt`
+          env.TEST_ID=`cat id.txt`
   sonar:
     needs: build
     runs-on: ${{ TEST_ID }}
