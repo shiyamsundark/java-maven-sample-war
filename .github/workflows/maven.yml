@@ -13,8 +13,8 @@ env:
 jobs:
   startrunner:
     runs-on: ubuntu-latest
-    outputs:
-      runner: ${{ steps.readid.outputs.runnermachine }}   
+    #outputs:
+      #runner: ${{ steps.readid.outputs.runnermachine }}   
     steps:
       - uses: actions/checkout@v3
       - id: readid
@@ -29,11 +29,11 @@ jobs:
                break
              fi
            done < "$input"
-      - name: Upload math result for job 1
-        uses: actions/upload-artifact@v3
-        with:
-          name: id
-          path: id.txt
+#       - name: Upload math result for job 1
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: id
+#           path: id.txt
                
   sleep-ec2:
     needs: startrunner
@@ -43,22 +43,32 @@ jobs:
         run: |
           sleep 60
           
-  build:
-     needs: [startrunner,sleep-ec2]
-     runs-on: ubuntu-latest
-     steps:
-      - name: Download math result for job 1
-        uses: actions/download-artifact@v3
-        with:
-          name: id
-      - shell: bash
-        run: |
-          cat id.txt >> ${{ env.TEST_ID }}
-  sonar:
-    needs: build
-    runs-on: ${{ TEST_ID }}
+  testjob:
+    needs: [sleep-ec2]
+    runs-on: ubuntu-latest
+    outputs:
+      runner: ${{ steps.runner.outputs.runner }}
     steps:
-      - run: echo "hello world"
+    - id: runner
+      run: echo "::set-output name=runner::$line"
+      
+  build:
+     needs: [startrunner,sleep-ec2,testjob]
+     runs-on: ${{ needs.build.outputs.runner }}
+     steps:
+        - run: echo "Hello World"
+#       - name: Download math result for job 1
+#         uses: actions/download-artifact@v3
+#         with:
+#           name: id
+#       - shell: bash
+#         run: |
+#           cat id.txt >> ${{ env.TEST_ID }}
+#   sonar:
+#     needs: build
+#     runs-on: ${{ TEST_ID }}
+#     steps:
+#       - run: echo "hello world"
                
   #stopawsec2:
     #needs: [sleep-ec2]
