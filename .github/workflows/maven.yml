@@ -10,30 +10,30 @@ env:
            AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
           
 jobs:
-   startrunner:
-     runs-on: ubuntu-latest
-     outputs:
-       runner: ${{ steps.readid.outputs.runner }}
-       runnerflag: ${{ steps.readid.outputs.flag }}
-     steps:
-      
-       - id: readid
-         run: |
-            aws s3 cp s3://instidbucket/id/InstanceID.txt
-#            input='${{ github.workspace }}/InstanceID.txt'
-#            while IFS= read -r line
-#            do
-#              echo "$line"
-#              status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
-#              if [ "$status" != "running" ];then
-#                aws ec2 start-instances --instance-ids $line
-#                echo "::set-output name=runner::$line"
-#                echo "::set-output name=flag::true"
-#                break
-#              fi
-#              echo "::set-output name=flag::false"
-#            done < "$input"
-#            sleep 60
+  startrunner:
+    runs-on: ubuntu-latest
+    outputs:
+      runner: ${{ steps.readid.outputs.runner }}
+      runnerflag: ${{ steps.readid.outputs.flag }}
+    steps:
+     
+      - id: readid
+        run: |
+           aws s3 cp s3://instidbucket/id/InstanceID.txt
+           input='${{ github.workspace }}/InstanceID.txt'
+           while IFS= read -r line
+           do
+             echo "$line"
+             status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
+             if [ "$status" != "running" ];then
+               aws ec2 start-instances --instance-ids $line
+               echo "::set-output name=runner::$line"
+               echo "::set-output name=flag::true"
+               break
+             fi
+             echo "::set-output name=flag::false"
+           done < "$input"
+           sleep 60
 #   Runner-status-check:
 #     needs: startrunner
 #     runs-on: ubuntu-latest
