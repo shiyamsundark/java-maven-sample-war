@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v3
       - id: readid
         run: |
-           input= ${{github.workspace}}/${{secrets.inspasspar}}
+           input= '${{github.workspace}}/InstanceID.txt'
            echo $input
            while IFS= read -r line
            do
