@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v3
       - id: readid
         run: |
-           'echo "$ID_PATH" > idpathfile'
+           echo "$ID_PATH" > idpathfile
            input='${{ secrets.ID_PATH }}'
            while IFS= read -r line
            do
