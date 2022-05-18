@@ -7,11 +7,11 @@ env:
            AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
         
 jobs:
-  startrunner:
+    startrunner:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        run: |
+      - run: |
           aws ec2 stop-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID_2 }}
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID1 }}
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
