@@ -5,6 +5,7 @@ env:
            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
            AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+           AWS_s3_bucket: ${{ secrets.AWS_S3BUCKET_NAME }}
           
 jobs:
   startrunner:
@@ -16,7 +17,7 @@ jobs:
       - uses: actions/checkout@v3
       - id: readid
         run: |
-           input=${{https://awsinstanceid.s3.us-west-2.amazonaws.com/awsinstanceid.txt}}
+           input= $(aws s3 cp s3://awsinstanceid/awsinstanceid.txt)
            while IFS= read -r line
            do
              echo "$line"
