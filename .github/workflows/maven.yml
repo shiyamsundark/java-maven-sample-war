@@ -18,7 +18,7 @@ jobs:
            aws s3 cp s3://awsinstanceid/awsinstanceid.txt ${{github.workspace}}/InstanceID1.txt
            cat ${{github.workspace}}/InstanceID1.txt
            input='${{github.workspace}}/InstanceID1.txt'
-           while IFS= read -r line
+           while IFS=$'\r\n'read -r line
            do
              echo "$line"
              status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
