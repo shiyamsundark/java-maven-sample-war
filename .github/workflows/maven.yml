@@ -31,11 +31,11 @@ jobs:
                break
              fi
            done < "$input"
-      - name: Upload math result for job 1
-        uses: actions/upload-artifact@v3
-        with:
-          name: id
-          path: id.txt
+#       - name: Upload math result for job 1
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: id
+#           path: id.txt
                
   sleep-ec2:
     needs: startrunner
