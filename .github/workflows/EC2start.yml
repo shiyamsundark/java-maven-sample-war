@@ -1,6 +1,13 @@
 name: Start AWS EC2
-on:
+on: 
   workflow_dispatch:
+  
+env:
+           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
+           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
+           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+                   
+          
 jobs:
   startrunner:
     runs-on: ubuntu-latest
@@ -10,7 +17,4 @@ jobs:
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID1 }}
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID2 }}
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID3 }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEYY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+  
