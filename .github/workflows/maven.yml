@@ -18,6 +18,7 @@ jobs:
       - id: readid
         run: |
            aws s3 cp s3://awsinstanceid/awsinstanceid.txt ${{github.workspace}}/InstanceID1.txt
+           cat ${{github.workspace}}/InstanceID1.txt
            input='${{github.workspace}}/InstanceID1.txt'
            while IFS= read -r line
            do
