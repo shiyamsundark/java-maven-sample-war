@@ -30,13 +30,7 @@ jobs:
                break
              fi
            done < "$input"
-           
-#       - name: Upload math result for job 1
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: id
-#           path: id.txt
-               
+                        
   sleep-ec2:
     needs: startrunner
     runs-on: ubuntu-latest
@@ -44,15 +38,6 @@ jobs:
       - name: waiting ec2 to start
         run: |
           sleep 60
-          
-#   testjob:
-#     needs: [sleep-ec2]
-#     runs-on: ubuntu-latest
-#     outputs:
-#       runner: ${{ steps.runner.outputs.runner }}
-#     steps:
-#     - id: runner
-#       run: echo "::set-output name=runner::$line"
       
 #   build:
 #      needs: [startrunner,sleep-ec2,testjob]
@@ -66,11 +51,7 @@ jobs:
 #       - shell: bash
 #         run: |
 #           cat id.txt >> ${{ env.TEST_ID }}
-#   sonar:
-#     needs: build
-#     runs-on: ${{ TEST_ID }}
-#     steps:
-#       - run: echo "hello world"
+
                
   stopawsec2:
     needs: [startrunner,sleep-ec2]
@@ -79,7 +60,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: stopec2
         run: |
-              
               aws ec2 stop-instances --instance-ids ${{needs.startrunner.outputs.runner}}
             
   
