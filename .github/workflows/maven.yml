@@ -21,7 +21,7 @@ jobs:
         run: |
            
            
-           input=$('aws s3 cp s3://instidbucket/id/InstanceID.txt')
+           input=$(aws s3 cp s3://instidbucket/id/InstanceID.txt InstanceID.txt)
            while IFS= read -r line
            do
              echo "$line"
