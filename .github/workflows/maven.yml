@@ -14,8 +14,8 @@ env:
 jobs:
   startrunner:
     runs-on: ubuntu-latest
-    #outputs:
-      #runner: ${{ steps.readid.outputs.runnermachine }}   
+    outputs:
+      runner: ${{ steps.readid.outputs.runnermachine }}   
     steps:
       - uses: actions/checkout@v3
       - id: readid
