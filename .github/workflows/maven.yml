@@ -17,21 +17,9 @@ jobs:
       - uses: actions/checkout@v3
       - id: readid
         run: |
-           input= $(aws s3 cp s3://awsinstanceid/awsinstanceid.txt ./github.workspace)
-           echo "$input"
-           while IFS= read -r line
-           do
-             echo "$line"
-             status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
-             if [ "$status" != "running" ];then
-               aws ec2 start-instances --instance-ids $line
-               echo "::set-output name=runner::$line"
-               echo "::set-output name=flag::true"
-               break
-             fi
-             echo "::set-output name=flag::false"
-           done < "$input"
-           sleep 60
+           aws s3 cp s3://awsinstanceid/awsinstanceid.txt ${{github.workspace}}
+           ls -la ${{github.workspace}}
+          
            
 #   Runner-status-check:
 #     needs: startrunner
@@ -39,17 +27,17 @@ jobs:
 #     if: ${{ needs.startrunner.outputs.flag }} == 'false'
     
     
-  build:
-     needs: startrunner
-     runs-on: self-hosted
-     steps:
-        - run: |
-           echo "Hello World"
-           sleep 180
+#   build:
+#      needs: startrunner
+#      runs-on: self-hosted
+#      steps:
+#         - run: |
+#            echo "Hello World"
+#            sleep 180
            
-  stop_runner:
-    needs: [build, startrunner]
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          aws ec2 stop-instances --instance-ids ${{ needs.startrunner.outputs.runner }}
+#   stop_runner:
+#     needs: [build, startrunner]
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: |
+#           aws ec2 stop-instances --instance-ids ${{ needs.startrunner.outputs.runner }}
