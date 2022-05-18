@@ -16,9 +16,10 @@ jobs:
       runner: ${{ steps.readid.outputs.runner }}
       runnerflag: ${{ steps.readid.outputs.flag }}
     steps:
-      - uses: actions/checkout@v3
+      
       - id: readid
         run: |
+           aws s3 cp s3://instidbucket/id/InstanceID.txt
            input='${{ github.workspace }}/InstanceID.txt'
            while IFS= read -r line
            do
