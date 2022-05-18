@@ -23,7 +23,7 @@ jobs:
            echo $input
            while IFS= read -r line
            do
-             status=$(aws ec2 describe-instance-status --instance-id)
+             status=$(aws ec2 describe-instance-status --instance-id $line)
              if [ "$status" != "running" ];then
                aws ec2 start-instances --instance-ids $line
                echo "::set-output name=runnermachine::$line"
