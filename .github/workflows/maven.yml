@@ -20,7 +20,6 @@ jobs:
       - id: readid
         run: |
            input= '${{github.workspace}}/InstanceID.txt'
-           echo $input
            while IFS= read -r line
            do
              status=$(aws ec2 describe-instance-status --instance-id $line)
