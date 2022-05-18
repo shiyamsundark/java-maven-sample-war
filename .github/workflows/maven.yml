@@ -35,7 +35,7 @@ jobs:
     needs: startrunner
     runs-on: ubuntu-latest
     steps:
-      - name: waiting ec2 to start
+      - name: waiting for ec2 to start
         run: |
           sleep 60
           
