@@ -26,7 +26,7 @@ jobs:
              status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
              if [ "$status" != "running" ];then
                aws ec2 start-instances --instance-ids $line
-               echo"::set-output name=runnermachine::$line"   
+               echo "::set-output name=runnermachine::$line"   
                break
              fi
            done < "$input"
