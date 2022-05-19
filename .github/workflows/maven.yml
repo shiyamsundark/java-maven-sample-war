@@ -16,10 +16,11 @@ jobs:
       runner: ${{ steps.readid.outputs.runner }}
       runnerflag: ${{ steps.readid.outputs.flag }}
     steps:
+      - uses: actions/checkout@v3
       - id: readid
         run: |
-           aws s3 cp s3://instidbucket/id/InstanceID2.txt ${{ github.workspace }}/InstanceID2.txt
-           input='${{ github.workspace }}/InstanceID2.txt'
+           aws s3 cp s3://awsinstanceid/InstanceID.txt ${{github.workspace}}/InstanceID1.txt
+           input='${{github.workspace}}/InstanceID1.txt'
            while IFS= read -r line
            do
              echo "$line"
@@ -33,12 +34,13 @@ jobs:
              echo "::set-output name=flag::false"
            done < "$input"
            sleep 60
+          
+           
 #   Runner-status-check:
-#     needs: [startrunner]
+#     needs: startrunner
 #     runs-on: ubuntu-latest
 #     if: ${{ needs.startrunner.outputs.flag }} == 'false'
- 
-   
+    
     
   build:
      needs: startrunner
@@ -47,7 +49,6 @@ jobs:
         - run: |
            echo "Hello World"
            sleep 180
-           
   stop_runner:
     needs: [build, startrunner]
     runs-on: ubuntu-latest
