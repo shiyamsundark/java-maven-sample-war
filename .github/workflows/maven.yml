@@ -19,8 +19,8 @@ jobs:
      
       - id: readid
         run: |
-           aws s3 cp s3://instidbucket/id/InstanceID.txt ${{ github.workspace }}/InstanceID.txt
-           input='${{ github.workspace }}/InstanceID.txt'
+           aws s3 cp s3://instidbucket/id/InstanceID2.txt ${{ github.workspace }}/InstanceID2.txt
+           input='${{ github.workspace }}/InstanceID2.txt'
            while IFS= read -r line
            do
              echo "$line"
