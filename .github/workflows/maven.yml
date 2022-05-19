@@ -38,13 +38,13 @@ jobs:
 #     if: ${{ needs.startrunner.outputs.flag }} == 'false'
     
     
-#   build:
-#      needs: startrunner
-#      runs-on: self-hosted
-#      steps:
-#         - run: |
-#            echo "Hello World"
-#            sleep 180
+  build:
+     needs: startrunner
+     runs-on: self-hosted
+     steps:
+        - run: |
+           echo "Hello World"
+           sleep 30
            
 #   stop_runner:
 #     needs: [build, startrunner]
