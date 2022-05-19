@@ -33,10 +33,26 @@ jobs:
              echo "::set-output name=flag::false"
            done < "$input"
            sleep 60
-#   Runner-status-check:
-#     needs: [startrunner,build,stop_runner]
-#     runs-on: ubuntu-latest
-#     if: ${{ needs.startrunner.outputs.flag }} == 'false'
+  Runner-status-check:
+    needs: [startrunner]
+    runs-on: ubuntu-latest
+    if: ${{ needs.startrunner.outputs.flag }} == 'false'
+    steps:
+      - run: |
+           sleep 240
+           aws s3 cp s3://instidbucket/id/InstanceID2.txt ${{ github.workspace }}/InstanceID2.txt
+           input='${{ github.workspace }}/InstanceID2.txt'
+           while IFS= read -r line
+           do
+             echo "$line"
+             status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
+             if [ "$status" != "running" ];then
+               aws ec2 start-instances --instance-ids $line
+               echo "::set-output name=runner::$line"
+               break
+             fi
+             done < "$input"
+             sleep 60
    
     
   build:
