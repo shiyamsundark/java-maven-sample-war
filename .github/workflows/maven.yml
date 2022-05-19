@@ -34,7 +34,7 @@ jobs:
            done < "$input"
            sleep 60
   Runner-status-check:
-    needs: startrunner
+    needs: [startrunner,build,stop_runner]
     runs-on: ubuntu-latest
     if: ${{ needs.startrunner.outputs.flag }} == 'false'
     steps:
