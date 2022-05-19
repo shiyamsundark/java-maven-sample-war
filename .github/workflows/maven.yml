@@ -15,9 +15,7 @@ jobs:
       - uses: actions/checkout@v3
       - id: readid
         run: |
-           aws s3 cp s3://awsinstanceid/awsinstanceid.txt ${{github.workspace}}/InstanceID1.txt
-           cat ${{github.workspace}}/InstanceID1.txt
-           input='${{github.workspace}}/InstanceID1.txt'
+           input='${{github.workspace}}/InstanceID.txt'
            while IFS=$'\r\n' read -r line
            do
              echo "$line"
