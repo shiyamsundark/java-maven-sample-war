@@ -58,7 +58,7 @@ jobs:
              sleep 60
       
   build:
-     needs: startrunner
+     needs: [startrunner,Runner-status-check]
      runs-on: self-hosted
      steps:
         - run: |
