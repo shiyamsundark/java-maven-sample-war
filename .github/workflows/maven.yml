@@ -29,7 +29,6 @@ jobs:
                break
              fi
            done < "$input"
-           exit 1
            
         name: Retrying
         continue-on-error: true
