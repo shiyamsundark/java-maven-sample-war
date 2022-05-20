@@ -41,8 +41,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: statuscheck2
-        if: ${{ needs.startrunner.outputs.flag }} == 'false'
+        
         run: |
+             if: ${{ needs.startrunner.outputs.flag }} == 'false'
              sleep 240
              aws s3 cp s3://instidbucket/id/InstanceID3.txt ${{github.workspace}}/InstanceID.txt
              input='${{github.workspace}}/InstanceID.txt'
