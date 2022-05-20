@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       runner: ${{ steps.readid.outputs.runner }}
-      runnerflag: ${{ steps.readid.outputs.flag }}
     steps:
       - uses: actions/checkout@v3
+        continue-on-error: true
       - id: readid
         run: |
            aws s3 cp s3://awsinstanceid/InstanceID.txt ${{github.workspace}}/InstanceID1.txt
@@ -24,19 +24,50 @@ jobs:
              if [ "$status" != "running" ];then
                aws ec2 start-instances --instance-ids $line
                echo "::set-output name=runner::$line"
-               echo "::set-output name=flag::true"
                break
              fi
-             echo "::set-output name=flag::false"
            done < "$input"
            sleep 60
-          
            
-#   Runner-status-check:
-#     needs: startrunner
-#     runs-on: ubuntu-latest
-#     if: ${{ needs.startrunner.outputs.flag }} == 'false'
-    
+        name: Retrying
+        continue-on-error: true
+      - id: retry1
+        if: steps.startrunner.output=='failure'        
+        run: |
+           aws s3 cp s3://awsinstanceid/InstanceID.txt ${{github.workspace}}/InstanceID1.txt
+           input='${{github.workspace}}/InstanceID1.txt'
+           while IFS= read -r line
+           do
+             echo "$line"
+             status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
+             if [ "$status" != "running" ];then
+               aws ec2 start-instances --instance-ids $line
+               echo "::set-output name=runner::$line"
+               break
+             fi
+           done < "$input"
+           sleep 60
+           exit 1
+             
+        name: Retrying again
+        continue-on-error: true
+      - id: retry2
+        if: steps.startrunner.output=='failure'        
+        run: |
+           aws s3 cp s3://awsinstanceid/InstanceID.txt ${{github.workspace}}/InstanceID1.txt
+           input='${{github.workspace}}/InstanceID1.txt'
+           while IFS= read -r line
+           do
+             echo "$line"
+             status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
+             if [ "$status" != "running" ];then
+               aws ec2 start-instances --instance-ids $line
+               echo "::set-output name=runner::$line"
+               break
+             fi
+           done < "$input"
+           sleep 60
+           exit 1
     
   build:
      needs: startrunner
@@ -46,9 +77,9 @@ jobs:
            echo "Hello World"
            sleep 180
            
-#   stop_runner:
-#     needs: [build, startrunner]
-#     runs-on: ubuntu-latest
-#     steps:
-#       - run: |
-#           aws ec2 stop-instances --instance-ids ${{ needs.startrunner.outputs.runner }}
+  stop_runner:
+    needs: [build, startrunner]
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          aws ec2 stop-instances --instance-ids ${{ needs.startrunner.outputs.runner }}
