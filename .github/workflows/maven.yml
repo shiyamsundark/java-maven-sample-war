@@ -15,7 +15,7 @@ jobs:
         continue-on-error: true
       - id: readid
         run: |
-           aws s3 cp s3://awsinstanceid/awsinstanceid.txt ${{ github.workspace }}/instanceid.txt
+           aws s3 cp s3://awsinstanceid/InstanceIDaws.txt ${{ github.workspace }}/instanceid.txt
            input='${{ github.workspace }}/instanceid.txt'
            sed 's/\r$//' ${{ github.workspace }}/instanceid.txt > input.txt
            echo "" >> input.txt
