@@ -15,9 +15,12 @@ jobs:
         continue-on-error: true
       - id: readid
         run: |
-           aws s3 cp s3://awsinstanceid/InstanceID.txt ${{github.workspace}}/InstanceID1.txt
-           input='${{github.workspace}}/InstanceID1.txt'
-           while IFS= read -r line
+           aws s3 cp s3://instance-id/instanceid.txt ${{ github.workspace }}/instanceid.txt
+           cat ${{ github.workspace }}/instanceid.txt
+           input='${{ github.workspace }}/instanceid.txt'
+           sed 's/\r$//' ${{ github.workspace }}/instanceid.txt > input.txt
+           echo "" >> input.txt
+           while IFS="\n" read -r line
            do
              echo "$line"
              status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
@@ -26,6 +29,7 @@ jobs:
                echo "::set-output name=runner::$line"
                break
              fi
+             exit 1
            done < "$input"
            sleep 60
            
