@@ -44,6 +44,7 @@ jobs:
         if: ${{ needs.startrunner.outputs.flag }} == 'false'
         run: |
              sleep 240
+             aws s3 cp s3://instidbucket/id/InstanceID3.txt ${{github.workspace}}/InstanceID.txt
              input='${{github.workspace}}/InstanceID.txt'
              while IFS= read -r line
              do
