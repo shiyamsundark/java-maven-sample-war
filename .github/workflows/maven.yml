@@ -31,6 +31,7 @@ jobs:
                  break
                fi
               done < "$input"
+            break
             retry=$[${retry}+1]
             echo "Retrying [${retry}/${maxRetries}] in ${retryInterval}(s) "
             sleep ${retryInterval}
