@@ -20,12 +20,12 @@ jobs:
             retryInterval=15
             until [ ${retry} -ge ${maxRetries} ]
             do
-             input='${{ github.workspace }}/instanceid.txt'
+             input='${{ github.workspace }}/instance.txt'
              while IFS="\n" read -r line
              do
                echo "$line"
                status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
-               if [ "$status" != "running" ];then
+               if [ "$status" != "running" ] || [ "$status" == "stopped" ] ;then
                  aws ec2 start-instances --instance-ids $line
                  echo "::set-output name=runner::$line"
                  break
