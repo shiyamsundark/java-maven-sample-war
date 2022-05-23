@@ -24,7 +24,7 @@ jobs:
              while IFS="\n" read -r line
              do
                echo "$line"
-               status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
+               status=$(aws ec2 describe-instance-status --include-all-instances-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
                if [ "$status" != "running" ] || [ "$status" == "stopped" ] ;then
                  aws ec2 start-instances --instance-ids $line
                  echo "::set-output name=runner::$line"
