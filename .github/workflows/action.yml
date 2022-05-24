@@ -20,22 +20,13 @@ jobs:
       runnerflag: ${{ steps.readid.outputs.flag }}
     steps:
       - uses: actions/checkout@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::883965538462:role/testrole
+          aws-region: us-east-1
       - name: test
         id: readid
         run: |
            aws s3 ls
-           aws s3 cp s3://instance-id/instanceid.txt ${{ github.workspace }}/id.txt --region us-west-1
-           input='${{ github.workspace }}/id.txt'
-           sed 's/\r$//' ${{ github.workspace }}/id.txt > input.txt
-           echo "" >> input.txt
-           while IFS="\n" read -r line
-           do 
-             status=$(aws ec2 describe-instance-status --region us-west-1 --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
-             if [ "$status" != "running" ];then
-               aws ec2 start-instances --instance-ids $line
-               echo "::set-output name=runner::$line"
-               echo "::set-output name=flag::true"
-               break
-             fi
-             echo "::set-output name=flag::false"
-           done < input.txt
+           
