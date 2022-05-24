@@ -6,10 +6,11 @@ on:
        description: "The runner output string"
        value: ${{ jobs.startrunner.outputs.runner }}
            
-env:
-           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
-           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
-           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}         
+# env:
+#            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
+#            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
+#            AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}         
+
 jobs:
   startrunner:
     runs-on: ubuntu-latest
