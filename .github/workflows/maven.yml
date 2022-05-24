@@ -9,7 +9,7 @@ jobs:
     secrets: 
        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
-       AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+       AWS_DEFAULT_REGION: "us-west-2"
     
            
   build:
