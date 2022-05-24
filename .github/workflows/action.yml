@@ -26,7 +26,7 @@ jobs:
             n=0
             until [[ ${retry} -ge ${maxRetries} || $n -gt 0 ]]
             do
-             aws s3 cp s3://awsinstanceid/Instanceidawsv1.txt ${{ github.workspace }}/id.txt
+             aws s3 cp s3://awsinstanceid/Instanceidawsv1.txt --endpoint-url https://awsinstanceid.s3.us-west-2.amazonaws.com ${{ github.workspace }}/id.txt
              input='${{ github.workspace }}/id.txt'
              sed 's/\r$//' ${{ github.workspace }}/id.txt > input.txt
              echo "" >> input.txt
