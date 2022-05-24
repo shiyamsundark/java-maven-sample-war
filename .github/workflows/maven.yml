@@ -22,7 +22,7 @@ jobs:
             do
              aws s3 cp s3://awsinstanceid/Instanceidawsv1.txt ${{ github.workspace }}/id.txt
              input='${{ github.workspace }}/id.txt'
-             sed 's/\r$//' ${{ github.workspace }}/id1.txt > input.txt
+             sed 's/\r$//' ${{ github.workspace }}/id.txt > input.txt
              echo "" >> input.txt
              while IFS="\n" read -r line
              do
