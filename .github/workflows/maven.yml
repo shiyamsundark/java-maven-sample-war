@@ -4,7 +4,7 @@ on:
 env:
            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
-           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}         
+           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
 jobs:
   startrunner:
     runs-on: ubuntu-latest
@@ -12,84 +12,45 @@ jobs:
       runner: ${{ steps.readid.outputs.runner }}
     steps:
       - uses: actions/checkout@v3
-        continue-on-error: true
       - id: readid
         run: |
             retry=0
             maxRetries=5
-            retryInterval=15
+            retryInterval=60
             n=0
-            until [ ${retry} -ge ${maxRetries} || ${n} -gt 0 ]
+            until [[ ${retry} -ge ${maxRetries} || $n -gt 0 ]]
             do
-             input='${{ github.workspace }}/instance.txt'
+             aws s3 cp s3://awsinstanceid/Instanceidawsv1.txt ${{ github.workspace }}/id.txt
+             input='${{ github.workspace }}/id.txt'
+             sed 's/\r$//' ${{ github.workspace }}/id1.txt > input.txt
+             echo "" >> input.txt
              while IFS="\n" read -r line
              do
                echo "$line"
-               status=$(aws ec2 describe-instance-status --instances-id $line --include-all-instances | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
-               if [ "$status" != "running" ] || [ "$status" == "stopped" ] ;then
+               status=$(aws ec2 describe-instance-status --instance-ids $line --include-all-instances | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
+               if [ "$status" == "stopped" ];then
                  aws ec2 start-instances --instance-ids $line
                  echo "::set-output name=runner::$line"
-                 break
+                 n=1
+                 break               
                fi
               done < "$input"
-            break
             retry=$[${retry}+1]
             echo "Retrying [${retry}/${maxRetries}] in ${retryInterval}(s) "
             sleep ${retryInterval}
             done
             if [ ${retry} -ge ${maxRetries} ]; then
-             echo "Failed after ${maxRetries} attempts!"
-             exit 1
-            fi
-           
-#         name: Retrying
-#         continue-on-error: true
-#       - id: retry1
-#         if: steps.startrunner.output=='failure'        
-#         run: |
-#            aws s3 cp s3://awsinstanceid/InstanceID.txt ${{github.workspace}}/InstanceID1.txt
-#            input='${{github.workspace}}/InstanceID1.txt'
-#            while IFS= read -r line
-#            do
-#              echo "$line"
-#              status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
-#              if [ "$status" != "running" ];then
-#                aws ec2 start-instances --instance-ids $line
-#                echo "::set-output name=runner::$line"
-#                break
-#              fi
-#            done < "$input"
-#            sleep 60
-#            exit 1
-             
-#         name: Retrying again
-#         continue-on-error: true
-#       - id: retry2
-#         if: steps.startrunner.output=='failure'        
-#         run: |
-#            aws s3 cp s3://awsinstanceid/InstanceID.txt ${{github.workspace}}/InstanceID1.txt
-#            input='${{github.workspace}}/InstanceID1.txt'
-#            while IFS= read -r line
-#            do
-#              echo "$line"
-#              status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
-#              if [ "$status" != "running" ];then
-#                aws ec2 start-instances --instance-ids $line
-#                echo "::set-output name=runner::$line"
-#                break
-#              fi
-#            done < "$input"
-#            sleep 60
-#            exit 1
-    
+              echo "Failed after ${maxRetries} attempts!"
+              exit 1
+            fi                    
+      
   build:
-     needs: startrunner
+     needs: [startrunner]
      runs-on: self-hosted
      steps:
         - run: |
            echo "Hello World"
-           sleep 600
-           
+           sleep 300
   stop_runner:
     needs: [build, startrunner]
     runs-on: ubuntu-latest
