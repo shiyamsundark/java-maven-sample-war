@@ -1,59 +1,23 @@
-name: Java CI with Maven
+name: Build
 on: 
   workflow_dispatch:
-env:
-           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
-           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
-           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+          
 jobs:
-  startrunner:
-    runs-on: ubuntu-latest
-    outputs:
-      runner: ${{ steps.readid.outputs.runner }}
-    steps:
-      - uses: actions/checkout@v3
-      - id: readid
-        run: |
-            retry=0
-            maxRetries=5
-            retryInterval=60
-            n=0
-            until [[ ${retry} -ge ${maxRetries} || $n -gt 0 ]]
-            do
-             aws s3 cp s3://awsinstanceid/Instanceidawsv1.txt ${{ github.workspace }}/id.txt
-             input='${{ github.workspace }}/id.txt'
-             sed 's/\r$//' ${{ github.workspace }}/id.txt > input.txt
-             echo "" >> input.txt
-             while IFS="\n" read -r line
-             do
-               echo "$line"
-               status=$(aws ec2 describe-instance-status --instance-ids $line --include-all-instances | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
-               if [ "$status" == "stopped" ];then
-                 aws ec2 start-instances --instance-ids $line
-                 echo "::set-output name=runner::$line"
-                 n=1
-                 break               
-               fi
-              done < "$input"
-            retry=$[${retry}+1]
-            echo "Retrying [${retry}/${maxRetries}] in ${retryInterval}(s) "
-            sleep ${retryInterval}
-            done
-            if [ ${retry} -ge ${maxRetries} ]; then
-              echo "Failed after ${maxRetries} attempts!"
-              exit 1
-            fi                    
-      
+  initializerunner:
+    name: Intialize Runner
+    uses: ./.github/workflows/action.yml
+           
   build:
-     needs: [startrunner]
-     runs-on: self-hosted
+     needs: initializerunner
+     runs-on: ${{ needs.initializerunner.outputs.runner }}
      steps:
         - run: |
            echo "Hello World"
-           sleep 300
+           sleep 240
+           
   stop_runner:
-    needs: [build, startrunner]
+    needs: [ build, initializerunner]
     runs-on: ubuntu-latest
     steps:
       - run: |
-          aws ec2 stop-instances --instance-ids ${{ needs.startrunner.outputs.runner }}
+          aws ec2 stop-instances --instance-ids ${{ needs.initializerunner.outputs.runner }}
