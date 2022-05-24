@@ -28,11 +28,11 @@ jobs:
       runnerflag: ${{ steps.readid.outputs.flag }}
     steps:
       - uses: actions/checkout@v3
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-region: us-west-1
-          role-to-assume: arn:aws:iam::883965538462:role/s3test
+#       - name: Configure AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-region: us-west-1
+#           role-to-assume: arn:aws:iam::883965538462:role/s3test
          
      
       - name: test
