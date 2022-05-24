@@ -1,62 +1,26 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: Java CI with Maven
+name: Build
 on: 
   workflow_dispatch:
-env:
-           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
           
 jobs:
-
-  startrunner:
-    runs-on: ubuntu-latest
-    outputs:
-      runner: ${{ steps.readid.outputs.runner }}
-      runnerflag: ${{ steps.readid.outputs.flag }}
-    steps:  
-      - id: readid
-        run: |
-           aws s3 cp s3://instidbucket/id/InstanceID3.txt ${{github.workspace}}/InstanceID.txt
-           input='${{github.workspace}}/InstanceID.txt'
-           while IFS= read -r line
-           do
-             echo "$line"
-             status=$(aws ec2 describe-instance-status --instance-id $line | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
-             if [ "$status" != "running" ];then
-               aws ec2 start-instances --instance-ids $line
-               echo "::set-output name=runner::$line"
-               echo "::set-output name=flag::true"
-               break
-             fi
-             echo "::set-output name=flag::false"
-           done < "$input"
-           sleep 60
-          
+  initializerunner:
+    name: Intialize Runner
+    uses: ./.github/workflows/action.yml
            
-#   Runner-status-check:
-#     needs: startrunner
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: statuscheck2
-#         if: ${{ needs.startrunner.outputs.flag }} == 'false'
-     
-      
   build:
-     needs: [startrunner]
-     runs-on: self-hosted
+     needs: initializerunner
+     runs-on: ${{ needs.initializerunner.outputs.runner }}
      steps:
         - run: |
            echo "Hello World"
-           sleep 180
+           sleep 240
+           
   stop_runner:
-    needs: [build, startrunner]
+    needs: [ build, initializerunner]
     runs-on: ubuntu-latest
     steps:
       - run: |
-          aws ec2 stop-instances --instance-ids ${{ needs.startrunner.outputs.runner }}
+          aws ec2 stop-instances --instance-ids ${{ needs.initializerunner.outputs.runner }}
 
          
          
