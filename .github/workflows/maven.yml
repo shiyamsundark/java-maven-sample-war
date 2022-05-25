@@ -10,16 +10,16 @@ jobs:
     name: Intialize Runner
     uses: ./.github/workflows/action.yml
     secrets: 
-       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
-       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
              
   build:
-     needs: initializerunner
-     runs-on: ${{ needs.initializerunner.outputs.activerunner }}
-     steps:
-        - run: |
-           echo "Hello World"
-           sleep 240
+       needs: initializerunner
+       runs-on: ${{ needs.initializerunner.outputs.activerunner }}
+       steps:
+          - run: |
+             echo "Hello World"
+             sleep 240
            
   stop_runner:
     needs: [ build, initializerunner]
