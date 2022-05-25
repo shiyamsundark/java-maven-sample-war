@@ -5,6 +5,8 @@ on:
 env:
     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}  
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     
 jobs:
   initializerunner:
@@ -21,7 +23,13 @@ jobs:
           - run: |
              echo "Hello World"
              sleep 240
-           
+   
+  buildandanalyze:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+           - run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shiyamsundark_java-maven-sample-war         
+  
   stop_runner:
     needs: [ build, initializerunner]
     runs-on: ubuntu-latest
