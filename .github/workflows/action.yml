@@ -7,24 +7,22 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
-      AWS_DEFAULT_REGION:
-        required: true
+
     outputs:
-      runner:
+      runneraws:
        description: "The runner output string"
        value: ${{ jobs.startrunner.outputs.runner }}
            
-# env:
-#            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
-#            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
-#            AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}         
+env:
+           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
+           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
+        
 
 jobs:
   startrunner:
     runs-on: ubuntu-latest
     outputs:
       runner: ${{ steps.readid.outputs.runner }}
-      runnerflag: ${{ steps.readid.outputs.flag }}
     steps:
       - uses: actions/checkout@v3
       - id: readid
@@ -35,16 +33,16 @@ jobs:
             n=0
             until [[ ${retry} -ge ${maxRetries} || $n -gt 0 ]]
             do
-             aws s3 cp s3://awsinstanceid/Instanceidawsv1.txt ${{ github.workspace }}/id.txt
+             aws s3 cp s3://awsinstanceid/Instanceidawsv1.txt ${{ github.workspace }}/id.txt --region - us-west-2
              input='${{ github.workspace }}/id.txt'
              sed 's/\r$//' ${{ github.workspace }}/id.txt > input.txt
              echo "" >> input.txt
              while IFS="\n" read -r line
              do
                echo "$line"
-               status=$(aws ec2 describe-instance-status --instance-ids $line --include-all-instances | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
+               status=$(aws ec2 describe-instance-status --region - us-west-2 --instance-ids $line --include-all-instances | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
                if [ "$status" == "stopped" ];then
-                 aws ec2 start-instances --instance-ids $line
+                 aws ec2 start-instances --region - us-west-2 --instance-ids $line
                  echo "::set-output name=runner::$line"
                  n=1
                  break               
