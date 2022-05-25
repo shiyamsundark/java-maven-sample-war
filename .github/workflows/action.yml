@@ -9,7 +9,7 @@ on:
         required: true
 
     outputs:
-      runneraws:
+      activerunner:
        description: "The runner output string"
        value: ${{ jobs.startrunner.outputs.runner }}
            
@@ -33,16 +33,16 @@ jobs:
             n=0
             until [[ ${retry} -ge ${maxRetries} || $n -gt 0 ]]
             do
-             aws s3 cp s3://awsinstanceid/Instanceidawsv1.txt ${{ github.workspace }}/id.txt --region - us-west-2
-             input='${{ github.workspace }}/id.txt'
-             sed 's/\r$//' ${{ github.workspace }}/id.txt > input.txt
-             echo "" >> input.txt
+             aws s3 cp s3://awsinstanceid/Instanceidawsv1.cfg ${{ github.workspace }}/id.cfg --region us-west-2
+             input='${{ github.workspace }}/id.cfg'
+             sed 's/\r$//' ${{ github.workspace }}/id.cfg > input.cfg
+             echo "" >> input.cfg
              while IFS="\n" read -r line
              do
                echo "$line"
-               status=$(aws ec2 describe-instance-status --region - us-west-2 --instance-ids $line --include-all-instances | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
+               status=$(aws ec2 describe-instance-status --region us-west-2 --instance-ids $line --include-all-instances | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
                if [ "$status" == "stopped" ];then
-                 aws ec2 start-instances --region - us-west-2 --instance-ids $line
+                 aws ec2 start-instances --region us-west-2 --instance-ids $line
                  echo "::set-output name=runner::$line"
                  n=1
                  break               
