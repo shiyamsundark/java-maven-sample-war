@@ -5,16 +5,14 @@ on:
 jobs:
   initializerunner:
     name: Intialize Runner
-    uses: shiyamsundark/java-maven-sample-war/.github/workflows/action.yml@testm
+    uses: ./.github/workflows/action.yml
     secrets: 
        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
-       AWS_DEFAULT_REGION: "us-west-2"
-    
-           
+             
   build:
      needs: initializerunner
-     runs-on: ${{ needs.initializerunner.outputs.runner }}
+     runs-on: ${{ needs.initializerunner.outputs.activerunner }}
      steps:
         - run: |
            echo "Hello World"
@@ -25,4 +23,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          aws ec2 stop-instances --instance-ids ${{ needs.initializerunner.outputs.runner }}
+          aws ec2 stop-instances --instance-ids ${{ needs.initializerunner.outputs.activerunner }} --region us-west-2
