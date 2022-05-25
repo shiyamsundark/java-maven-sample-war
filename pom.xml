@@ -23,7 +23,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.organization>shiyamsundark</sonar.organization>
-                <sonar.host.url>http://sonarcloud.io</sonar.host.url>
+                <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	
@@ -36,31 +36,21 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<plugins>
+           <plugins>
 			<plugin>
-				<groupId>org.sonarsource.scanner.maven</groupId>
-				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.3.0.603</version>
-<!-- 				<configuration>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-				</configuration> -->
-				<executions>
-				  <execution>
-				   <phase>verify</phase>
-				   <goals>
-				    <goal>sonar</goal>
-				   </goals>
-				  </execution>
-				</executions>
+				</configuration>
 			</plugin>
-<!-- 			<plugin>
+			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.5</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
-			</plugin> -->
 			</plugin>
 		</plugins>
 	</build>
