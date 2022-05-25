@@ -1,14 +1,13 @@
 name: Build
-
 on:
  workflow_call:
-    secrets:
+   secrets:
       AWS_ACCESS_KEY_ID:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
 
-    outputs:
+   outputs:
       activerunner:
        description: "The runner output string"
        value: ${{ jobs.startrunner.outputs.runner }}
@@ -47,7 +46,7 @@ jobs:
                  n=1
                  break               
                fi
-              done < "$input"
+              done < input.cfg
             retry=$[${retry}+1]
             echo "Retrying [${retry}/${maxRetries}] in ${retryInterval}(s) "
             sleep ${retryInterval}
