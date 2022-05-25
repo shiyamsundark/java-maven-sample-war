@@ -6,6 +6,10 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
+      GITHUB_TOKEN:
+        required: true
+      SONAR_TOKEN: 
+        required: true
 
    outputs:
       activerunner:
@@ -14,7 +18,9 @@ on:
            
 env:
      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESSKEY }}
-     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}
+     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETKEY }}    
+     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         
 
 jobs:
