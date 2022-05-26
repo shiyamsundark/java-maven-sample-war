@@ -9,6 +9,11 @@ env:
 #     GITHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
     
 jobs:
+
+  Pre-Release:
+    name: Pre-Release
+    uses: ./.github/workflows/pre-release.yml
+    
   initializerunner:
     name: Intialize Runner
     uses: ./.github/workflows/action.yml
@@ -25,8 +30,32 @@ jobs:
           - run: |
              echo "Hello World"
              sleep 60
-             mvn -B verify sonar:sonar -Dsonar.projectKey=shiyamsundark_java-maven-sample-war -Dsonar.organization=shiyamsundark -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
-             
+               
+  Sonar:
+    needs: [BuildandAnalyze,initializerunner]
+    runs-on: ${{ needs.initializerunner.outputs.activerunner }}
+    steps:   
+      - name: Sonar Analysis
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=shiyamsundark_java-maven-sample-war -Dsonar.organization=shiyamsundark -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN     
+        
+  Fortify:
+    needs: [initializerunner,Pre-Release]
+    runs-on: ubuntu-latest
+    steps:    
+      - name: Fortify Analysis
+        run: echo Starting Fortify stage!!
+        
+  Post-Release:
+    name: Post-Release
+    needs: [initializerunner,Pre-Release,BuildandAnalyze,Sonar,Fortify]
+    uses: ./.github/workflows/post-release.yml  
+      
+  Declarative-Post-Actions:
+    needs: [Post-Release]
+    runs-on: ubuntu-latest
+    steps:    
+      - name: Sent Results
+        run: echo Mailing results to recipients!!        
   
   stop_runner:
     needs: [ BuildandAnalyze, initializerunner]
