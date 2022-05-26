@@ -8,7 +8,7 @@ on:
         required: true
       SONAR_TOKEN: 
         required: true
-      SONAR_HOST_URL:
+      GITHUB_TOKEN:
         required: true
 
    outputs:
@@ -20,7 +20,7 @@ env:
      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}    
      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+     GITHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
         
 
 jobs:
