@@ -28,9 +28,9 @@ jobs:
        needs: [initializerunner,Pre-Release]
        runs-on: ${{ needs.initializerunner.outputs.activerunner }}
        steps:
-          - run: |
-             echo "Hello World"
-             sleep 60
+          - run: mvn clean verify
+             
+         
                
   Sonar:
     needs: [Build,initializerunner]
