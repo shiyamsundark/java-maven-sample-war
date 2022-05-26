@@ -59,7 +59,7 @@ jobs:
         run: echo Mailing results to recipients!!        
   
   stop_runner:
-    needs: [ Build, initializerunner,Sonar,Pre-Release,Post-Release]
+    needs: [ Build, initializerunner,Sonar,Pre-Release,Post-Release,Declarative-Post-Actions]
     runs-on: ubuntu-latest
     steps:
       - run: |
