@@ -41,7 +41,7 @@ jobs:
         needs: [Build,initializerunner,Sonar]
         runs-on: ${{ needs.initializerunner.outputs.activerunner }}
         steps:
-          - run: mvn -B -e -X clean deploy
+          - run: mvn deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GIHUB_TOKEN }}
           
