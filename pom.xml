@@ -54,4 +54,11 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub shiyamsundark Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/shiyamsundark/java-maven-sample-war</url>
+		</repository>
+	</distributionManagement>
 </project>
