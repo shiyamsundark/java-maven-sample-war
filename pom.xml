@@ -60,5 +60,10 @@
 			<name>GitHub shiyamsundark Apache Maven Packages</name>
 			<url>https://maven.pkg.github.com/shiyamsundark/java-maven-sample-war</url>
 		</repository>
+		<snapshotRepository>
+                   	<id>snapshots</id>
+			<name>plugins-snapshot</name>
+			<url>http://serverip:8081/artifactory/plugins-snapshot-local</url>
+    		</snapshotRepository>
 	</distributionManagement>
 </project>
