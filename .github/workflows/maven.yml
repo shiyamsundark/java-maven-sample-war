@@ -40,8 +40,17 @@ jobs:
   PublishartifactonGitHubPackages:
         needs: [Build,initializerunner,Sonar]
         runs-on: ${{ needs.initializerunner.outputs.activerunner }}
+        permissions: 
+          contents: read
+          packages: write
         steps:
-          - run: mvn deploy
+          - uses: actions/checkout@v3
+          - uses: actions/setup-java@v3
+            with:
+              java-version: '11'
+              distribution: 'adopt'
+          - name: Publish package
+            run: mvn --batch-mode deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GIHUB_TOKEN }}
           
