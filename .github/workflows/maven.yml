@@ -29,9 +29,7 @@ jobs:
        runs-on: ${{ needs.initializerunner.outputs.activerunner }}
        steps:
           - run: mvn clean verify
-             
-         
-               
+    
   Sonar:
     needs: [Build,initializerunner]
     runs-on: ${{ needs.initializerunner.outputs.activerunner }}
@@ -39,6 +37,14 @@ jobs:
       - name: Sonar Analysis
         run: mvn -B verify sonar:sonar -Dsonar.projectKey=shiyamsundark_java-maven-sample-war -Dsonar.organization=shiyamsundark -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN     
         
+  PublishartifactonGitHubPackages:
+        needs: [Build,initializerunner,Sonar]
+        runs-on: ${{ needs.initializerunner.outputs.activerunner }}
+        steps:
+          - run: mvn -B -e -X clean deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIHUB_TOKEN }}
+          
   Fortify:
     needs: [initializerunner,Pre-Release]
     runs-on: ubuntu-latest
