@@ -47,7 +47,7 @@ jobs:
       - name: Sonar Analysis
         
         run: |
-          echo Sonar Starts here!!
+          echo Sonar Starts here!!!!
           mvn -B verify sonar:sonar -Dsonar.projectKey=2115-27_java-maven-sample-war -Dsonar.organization=2115-27 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
   Fortify:
     needs: [initializerunner,Pre-Release]
