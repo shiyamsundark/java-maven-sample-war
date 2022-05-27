@@ -66,9 +66,9 @@ jobs:
           distribution: 'adopt'
       - name: Publish package
         run: mvn deploy -Dserver.username=shiyamsundark -Dserver.password=${{ secrets.GIHUB_TOKEN }} -DskipTests
-#         run: mvn deploy
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: mvn deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
 #   Sonar:
 #     needs: [Build,initializerunner]
