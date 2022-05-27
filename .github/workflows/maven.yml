@@ -55,9 +55,9 @@ jobs:
     name: Publish - GitHub Packages
     runs-on: ${{ needs.initializerunner.outputs.activerunner }}
     needs: [Build,initializerunner]
-    permissions: 
-        contents: read
-        packages: write
+#     permissions: 
+#         contents: read
+#         packages: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
@@ -65,9 +65,10 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Publish package
-        run: mvn deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: mvn deploy -Dserver.username=shiyamsundark -Dserver.password=${{ secrets.GIHUB_TOKEN }} -DskipTests
+#         run: mvn deploy
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
 #   Sonar:
 #     needs: [Build,initializerunner]
