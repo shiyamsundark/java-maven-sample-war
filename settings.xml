@@ -60,6 +60,9 @@ under the License.
             <repository>
                 <id>github</id>
                 <url>https://maven.pkg.github.com/shiyamsundark/java-maven-sample-war</url>
+                <snapshots>
+                 <enabled>true</enabled>
+                </snapshots>
             </repository>
          </repositories>
        </profile>
