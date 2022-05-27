@@ -1,28 +1,21 @@
-name: Build
-on:
- workflow_call:
-   secrets:
+name: Start Runner
+on: 
+  workflow_call:
+    secrets:
       AWS_ACCESS_KEY_ID:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
-      SONAR_TOKEN: 
-        required: true
-#       GITHUB_TOKEN:
-#         required: true
-
-   outputs:
+       
+    outputs:
       activerunner:
-       description: "The runner output string"
-       value: ${{ jobs.startrunner.outputs.runner }}
-           
-env:
-     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}    
-     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#      GITHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
+        description: "The runner output string"
+        value: ${{ jobs.startrunner.outputs.runner }}
         
-
+env:
+           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          
 jobs:
   startrunner:
     runs-on: ubuntu-latest
@@ -30,34 +23,36 @@ jobs:
       runner: ${{ steps.readid.outputs.runner }}
     steps:
       - uses: actions/checkout@v3
-      - id: readid
+      - name: test
+        id: readid
+        #continue-on-error: true 
         run: |
-            retry=0
-            maxRetries=5
-            retryInterval=60
-            n=0
-            until [[ ${retry} -ge ${maxRetries} || $n -gt 0 ]]
-            do
-             aws s3 cp s3://awsinstanceid/Instanceidawsv1.cfg ${{ github.workspace }}/id.cfg --region us-west-2
-             input='${{ github.workspace }}/id.cfg'
-             sed 's/\r$//' ${{ github.workspace }}/id.cfg > input.cfg
-             echo "" >> input.cfg
-             while IFS="\n" read -r line
+             retry=0
+             maxRetries=5
+             retryInterval=60
+             n=0
+             until [[ $retry -ge $maxRetries || $n -gt 0 ]]
              do
-               echo "$line"
-               status=$(aws ec2 describe-instance-status --region us-west-2 --instance-ids $line --include-all-instances | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
-               if [ "$status" == "stopped" ];then
-                 aws ec2 start-instances --region us-west-2 --instance-ids $line
-                 echo "::set-output name=runner::$line"
-                 n=1
-                 break               
-               fi
-              done < input.cfg
-            retry=$[${retry}+1]
-            echo "Retrying [${retry}/${maxRetries}] in ${retryInterval}(s) "
-            sleep ${retryInterval}
-            done
-            if [ ${retry} -ge ${maxRetries} ]; then
-              echo "Failed after ${maxRetries} attempts!"
-              exit 1
-            fi                    
+               aws s3 cp s3://instidbucket/id/instid2.cfg ${{ github.workspace }}/id.cfg --region us-west-1
+               input='${{ github.workspace }}/id.cfg'
+               sed 's/\r$//' ${{ github.workspace }}/id.cfg > input.cfg
+               echo "" >> input.cfg
+                 while IFS="\n" read -r line
+                 do 
+                   echo $line
+                   status=$(aws ec2 describe-instance-status --region us-west-1 --instance-id $line --include-all-instances | jq -r '.InstanceStatuses[] | .InstanceState | .Name')
+                   if [ "$status" == "stopped" ];then
+                     aws ec2 start-instances --region us-west-1 --instance-ids $line
+                     echo "::set-output name=runner::$line"
+                     n=1
+                     break
+                   fi
+                 done < input.cfg
+               retry=$[$retry+1]
+               echo "Retrying [$retry/$maxRetries}] in $retryInterval(s) "
+               sleep $retryInterval
+               done
+               if [ $retry -ge $maxRetries ]; then
+                 echo "Failed after $maxRetries attempts!"
+                 exit 1
+               fi                 
