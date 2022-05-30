@@ -19,7 +19,6 @@ jobs:
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    
       
   build:
      needs: [initializerunner,Pre-Release]
@@ -45,11 +44,10 @@ jobs:
     steps: 
       - uses: actions/checkout@v2
       - name: Sonar Analysis
-        
         run: |
           echo Sonar Starts here!!!!
-          echo This is the change
           mvn -B verify sonar:sonar -Dsonar.projectKey=2115-27_java-maven-sample-war -Dsonar.organization=2115-27 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+          
   Fortify:
     needs: [initializerunner,Pre-Release]
     runs-on: ubuntu-latest
