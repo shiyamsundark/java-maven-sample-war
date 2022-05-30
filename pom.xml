@@ -4,7 +4,7 @@
 
 	<groupId>com.github.Premvikash</groupId>
 	<artifactId>build-helper-maven-plugin</artifactId>
-<!-- 	<version>0.0.1</version> -->
+	<version>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion}</version>
 	<name>Example</name>
 	<packaging>war</packaging>
 	<url>https://github.com/2115-27/</url>
