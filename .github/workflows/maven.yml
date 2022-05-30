@@ -12,12 +12,12 @@ jobs:
 
   Pre-Release:
     name: Pre-Release
-    uses: 2115-27/DevOps/.github/workflows/pre-release.yml@main
+    uses: ./.github/workflows/pre-release.yml
     
   initializerunner:
     name: Intialize Runner
     needs: Pre-Release
-    uses: 2115-27/DevOps/.github/workflows/startRunner.yml@main
+    uses: ./.github/workflows/action.yml
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -62,7 +62,7 @@ jobs:
   Post-Release:
     name: Post-Release
     needs: [initializerunner,Pre-Release,build,Sonar,Fortify]
-    uses: 2115-27/DevOps/.github/workflows/post-release.yml@main  
+    uses: ./.github/workflows/post-release.yml  
       
   Declarative-Post-Actions:
     needs: [Post-Release]
