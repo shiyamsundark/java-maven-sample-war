@@ -31,14 +31,14 @@ jobs:
 #           java-version: '11'
 #           distribution: 'adopt'
       - name: Build with Maven
-        run: mvn clean verify 
-      - name: Deploy to Github Package Registry
-        env:
-          GHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
-          GHUB_USERNAME: ${{ secrets.GHUB_USERNAME }}
+        run: mvn -B clean verify 
+#       - name: Deploy to Github Package Registry
+#         env:
+#           GHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
+#           GHUB_USERNAME: ${{ secrets.GHUB_USERNAME }}
           
-        run: |
-           mvn clean package -DattachMuleSources -Pgithub deploy
+#         run: |
+#            mvn clean package -DattachMuleSources -Pgithub deploy
                            
   Sonar:
     needs: [build,initializerunner]
