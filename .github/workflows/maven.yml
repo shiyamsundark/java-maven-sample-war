@@ -27,6 +27,9 @@ jobs:
   Build:
        needs: [initializerunner]
        runs-on: ${{ needs.initializerunner.outputs.activerunner }}
+       permissions:
+        contents: read
+        packages: write
        steps:
           - uses: actions/checkout@v2
           - name: Set up JDK 11
@@ -42,7 +45,7 @@ jobs:
           - name: Publish to GitHub Packages Apache Maven
             run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
             env:
-             GITHUB_TOKEN: ${{ github.token }}
+             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 #   sonar:
 #     name: Test - SonarCloud Scan
