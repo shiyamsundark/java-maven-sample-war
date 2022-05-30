@@ -51,21 +51,21 @@ jobs:
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-  artifact:
-    name: Publish - GitHub Packages
-    runs-on: ${{ needs.initializerunner.outputs.activerunner }}
-    needs: [Build,initializerunner]
-#     permissions: 
-#         contents: read
-#         packages: write
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-      - name: Publish package
-        run: mvn deploy -Dserver.username=shiyamsundark -Dserver.password=${{ secrets.GIHUB_TOKEN }} -DskipTests
+#   artifact:
+#     name: Publish - GitHub Packages
+#     runs-on: ${{ needs.initializerunner.outputs.activerunner }}
+#     needs: [Build,initializerunner]
+# #     permissions: 
+# #         contents: read
+# #         packages: write
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: actions/setup-java@v3
+#         with:
+#           java-version: '11'
+#           distribution: 'adopt'
+#       - name: Publish package
+#         run: mvn deploy -Dserver.username=shiyamsundark -Dserver.password=${{ secrets.GIHUB_TOKEN }} -DskipTests
 
     
 #   Sonar:
