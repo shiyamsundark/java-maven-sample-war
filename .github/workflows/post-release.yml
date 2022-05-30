@@ -16,7 +16,7 @@ jobs:
         - name: Post Release Task
           run: |
             echo Update Versioning Repo!!
-            aws s3 cp s3://instidbucket/version/version.cfg ${{ github.workspace }}/versions.cfg --region us-west-1
+            aws s3 cp s3://instidbucket/version/versionnew.cfg ${{ github.workspace }}/versions.cfg --region us-west-1
             
             echo "${{ github.run_number }}" >> versions.cfg
             cat versions.cfg
