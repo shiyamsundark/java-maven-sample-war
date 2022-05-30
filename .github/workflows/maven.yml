@@ -31,7 +31,7 @@ jobs:
 #           java-version: '11'
 #           distribution: 'adopt'
       - name: Build with Maven
-        run: mvn build-helper:parse-version help:effective-pom
+        run: mvn build-helper:parse-version help:effective-pom -DbumpPatch
 #       - name: Deploy to Github Package Registry
 #         env:
 #           GHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
