@@ -44,7 +44,7 @@ jobs:
             run: mvn -B package --file pom.xml
 
           - name: Publish to GitHub Packages Apache Maven
-            run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml -Dversion=${{needs.Pre-Release.outputs.currentversion}}
+            run: mvn deploy -Dversion=${{needs.Pre-Release.outputs.currentversion}} -s $GITHUB_WORKSPACE/settings.xml
             env:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
 
@@ -68,7 +68,7 @@ jobs:
         
   Post-Release:
     name: Post-Release
-    needs: [initializerunner,Pre-Release,build,Fortify]
+    needs: [initializerunner,Pre-Release,Build,Fortify]
     uses: ./.github/workflows/post-release.yml 
  
       
@@ -80,7 +80,7 @@ jobs:
         run: echo Mailing results to recipients!!     
         
   stop_runner:
-    needs: [initializerunner,build,Declarative-Post-Actions]
+    needs: [initializerunner,Build,Declarative-Post-Actions]
     runs-on: ubuntu-latest
     steps:
       - run: |
