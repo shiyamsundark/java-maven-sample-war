@@ -16,7 +16,12 @@ jobs:
         run: echo updating Version Repo!!
         
       - name: Set Release Version
-        run: echo setting release version!!
+        run: |
+          echo setting release version!!
+          aws s3 cp s3://instidbucket/version/versionnew.cfg ${{ github.workspace }}/versions.cfg --region us-west-1  
+          echo "${{ github.run_number }}" >> versions.cfg
+          newversion=$(cat versions.cfg)
+          echo $newversion
         
       - name: Pre-Build
         run: echo Executing Pre build steps!!
