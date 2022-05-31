@@ -13,6 +13,8 @@ jobs:
   Pre-Release:
     
     runs-on: ubuntu-latest
+    outputs:
+      versn: ${{ steps.versnid.outputs.versn }}
     steps:
       - uses: actions/checkout@v2
 
@@ -22,6 +24,7 @@ jobs:
       - name: Pre-Release Task
         run: echo updating Version Repo!!
         
+      - id: versnid
       - name: Set Release Version
         run: |
           echo setting release version!!
@@ -29,6 +32,7 @@ jobs:
           echo "${{ github.run_number }}" >> versions.cfg
           newversion=$(cat versions.cfg)
           echo $newversion
+          echo "::set-output name=versn::$newversion"
         
       - name: Pre-Build
         run: echo Executing Pre build steps!!
