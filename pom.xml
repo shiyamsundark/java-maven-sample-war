@@ -4,7 +4,7 @@
 
 	<groupId>com.github.2115-27</groupId>
 	<artifactId>example</artifactId>
-	<version>0.0.2</version>
+	<version>{snapshot.version}</version>
 	<name>Example</name>
 	<packaging>war</packaging>
 	<url>https://github.com/2115-27/</url>
