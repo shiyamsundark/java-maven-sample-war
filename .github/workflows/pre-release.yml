@@ -43,6 +43,7 @@ jobs:
         run: echo Starting Build+Sonar!!
   testjob: 
     runs-on: ubuntu-latest
+    needs: Pre-Release
     steps: 
        - run: echo ${{needs.Pre-Release.outputs.versn}}
         
