@@ -41,7 +41,7 @@ jobs:
               server-id: github 
               settings-path: ${{ github.workspace }} 
           - name: Build with Maven
-            run: mvn -B package --file pom.xml
+            run: mvn -B package --file pom.xml -Dsnapshot.version=${{needs.Pre-Release.outputs.currentversion}}
 
           - name: Publish to GitHub Packages Apache Maven
             run: mvn deploy -Dversion=${{needs.Pre-Release.outputs.currentversion}} -s $GITHUB_WORKSPACE/settings.xml
