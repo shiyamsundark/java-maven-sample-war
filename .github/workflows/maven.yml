@@ -40,7 +40,7 @@ jobs:
           mvn clean verify
           xml_file="pom.xml"
           tag="version"
-          new_value="${{needs.Pre-Release.outputs.versn}}"
+          new_value="\${{needs.Pre-Release.outputs.versn}}"
           temporary="temp_file.temp"
           echo " ">> $xml_file
           tag_value=$(grep "<$tag>.*<.$tag>" $xml_file | sed -e "s/^.*<$tag/<$tag/" | cut -f2 -d">"| cut -f1 -d"<")
