@@ -37,7 +37,7 @@ jobs:
 #           distribution: 'adopt'
       - name: Build with Maven
         run: |
-          echo $newversion
+          echo ${{needs.Pre-Release.outputs.versn}}
                            
 #   Sonar:
 #     needs: [build,initializerunner]
