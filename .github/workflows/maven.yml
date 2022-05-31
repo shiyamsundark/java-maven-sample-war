@@ -42,15 +42,15 @@ jobs:
 #         run: |
 #            mvn clean package -DattachMuleSources -Pgithub deploy
                            
-  Sonar:
-    needs: [build,initializerunner]
-    runs-on: ${{ needs.initializerunner.outputs.activerunner }}
-    steps: 
-      - uses: actions/checkout@v2
-      - name: Sonar Analysis
-        run: |
-          echo Sonar Starts here!!
-          mvn -B verify sonar:sonar -Dsonar.projectKey=2115-27_java-maven-sample-war -Dsonar.organization=2115-27 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+#   Sonar:
+#     needs: [build,initializerunner]
+#     runs-on: ${{ needs.initializerunner.outputs.activerunner }}
+#     steps: 
+#       - uses: actions/checkout@v2
+#       - name: Sonar Analysis
+#         run: |
+#           echo Sonar Starts here!!
+#           mvn -B verify sonar:sonar -Dsonar.projectKey=2115-27_java-maven-sample-war -Dsonar.organization=2115-27 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
           
   Fortify:
     needs: [initializerunner,Pre-Release]
@@ -61,7 +61,7 @@ jobs:
         
   Post-Release:
     name: Post-Release
-    needs: [initializerunner,Pre-Release,build,Sonar,Fortify]
+    needs: [initializerunner,Pre-Release,build,Fortify]
     uses: ./.github/workflows/post-release.yml 
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -75,7 +75,7 @@ jobs:
         run: echo Mailing results to recipients!!     
         
   stop_runner:
-    needs: [initializerunner,build,Sonar,Declarative-Post-Actions]
+    needs: [initializerunner,build,Declarative-Post-Actions]
     runs-on: ubuntu-latest
     steps:
       - run: |
