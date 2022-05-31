@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.Premvikash</groupId>
+	<groupId>com.github.2115-27</groupId>
 	<artifactId>example</artifactId>
 	<version>0.0.1</version>
 	<name>Example</name>
@@ -61,7 +61,7 @@
           <repository>
 	      <id>github</id>
 	      <name>2115-27</name>
-	      <url>registry=https://maven.pkg.github.com/2115-27/java-maven-sample-war</url>
+	      <url>https://maven.pkg.github.com/2115-27/java-maven-sample-war</url>
           </repository>
 		
         </distributionManagement>
