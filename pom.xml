@@ -4,7 +4,7 @@
 
 	<groupId>com.github.Premvikash</groupId>
 	<artifactId>example</artifactId>
-	<version>${snapshot.version}</version>
+	<version>0.0.1</version>
 	<name>Example</name>
 	<packaging>war</packaging>
 	<url>https://github.com/2115-27/</url>
