@@ -38,17 +38,6 @@ jobs:
       - name: Build with Maven
         run: |
           mvn clean verify
-          xml_file="pom.xml"
-          tag="version"
-          new_value="\${{needs.Pre-Release.outputs.versn}}"
-          temporary="temp_file.temp"
-          echo " ">> $xml_file
-          tag_value=$(grep "<$tag>.*<.$tag>" $xml_file | sed -e "s/^.*<$tag/<$tag/" | cut -f2 -d">"| cut -f1 -d"<")
-          echo "Found tag value $tag_value..."
-          sed -e "s/<$tag>$tag_value<\/$tag>/<$tag>$new_value<\/$tag>/g" $xml_file > $temporary
-          echo "Changing $tag to $new_value..."
-          chmod 666 $xml_file
-          mv $temporary $xml_file
                            
 #   Sonar:
 #     needs: [build,initializerunner]
