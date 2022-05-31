@@ -13,7 +13,10 @@ jobs:
   Pre-Release:
     name: Pre-Release
     uses: ./.github/workflows/pre-release.yml
-    
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
   initializerunner:
     name: Intialize Runner
     needs: Pre-Release
@@ -63,9 +66,7 @@ jobs:
     name: Post-Release
     needs: [initializerunner,Pre-Release,build,Fortify]
     uses: ./.github/workflows/post-release.yml 
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+ 
       
   Declarative-Post-Actions:
     needs: [Post-Release]
