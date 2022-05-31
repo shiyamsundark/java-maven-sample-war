@@ -41,3 +41,8 @@ jobs:
         
       - name: Build and Sonar Analysis
         run: echo Starting Build+Sonar!!
+  testjob: 
+    runs-on: ubuntu-latest
+    steps: 
+       - run: echo ${{needs.Pre-Release.outputs.versn}}
+        
