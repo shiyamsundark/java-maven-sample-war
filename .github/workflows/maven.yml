@@ -49,15 +49,15 @@ jobs:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
 
                            
-#   Sonar:
-#     needs: [build,initializerunner]
-#     runs-on: ${{ needs.initializerunner.outputs.activerunner }}
-#     steps: 
-#       - uses: actions/checkout@v2
-#       - name: Sonar Analysis
-#         run: |
-#           echo Sonar Starts here!!
-#           mvn -B verify sonar:sonar -Dsonar.projectKey=2115-27_java-maven-sample-war -Dsonar.organization=2115-27 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+  Sonar:
+    needs: [Build,initializerunner]
+    runs-on: ${{ needs.initializerunner.outputs.activerunner }}
+    steps: 
+      - uses: actions/checkout@v2
+      - name: Sonar Analysis
+        run: |
+          echo Sonar Starts here!!
+          mvn -B verify sonar:sonar -Dsonar.projectKey=2115-27_java-maven-sample-war -Dsonar.organization=2115-27 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
           
   Fortify:
     needs: [initializerunner,Pre-Release]
