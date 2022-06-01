@@ -73,14 +73,14 @@ jobs:
  
       
   Declarative-Post-Actions:
-    needs: [Post-Release]
+    needs: [Post-Release,Sonar]
     runs-on: ubuntu-latest
     steps:    
       - name: Sent Results
         run: echo Mailing results to recipients!!     
         
   stop_runner:
-    needs: [initializerunner,Build,Declarative-Post-Actions]
+    needs: [initializerunner,Build,Declarative-Post-Actions,Sonar]
     runs-on: ubuntu-latest
     steps:
       - run: |
