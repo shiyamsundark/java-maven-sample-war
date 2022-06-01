@@ -66,21 +66,16 @@ jobs:
       - name: Fortify Analysis
         run: echo Starting Fortify stage!!
         
-  Post-Release:
-    name: Post-Release
-    needs: [initializerunner,Pre-Release,Build,Fortify]
-    uses: ./.github/workflows/post-release.yml 
- 
       
   Declarative-Post-Actions:
-    needs: [Post-Release,Sonar]
+    needs: [Fortify,Sonar]
     runs-on: ubuntu-latest
     steps:    
       - name: Sent Results
         run: echo Mailing results to recipients!!     
         
   stop_runner:
-    needs: [initializerunner,Build,Declarative-Post-Actions,Sonar]
+    needs: [initializerunner,Build,Declarative-Post-Actions]
     runs-on: ubuntu-latest
     steps:
       - run: |
