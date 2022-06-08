@@ -59,7 +59,7 @@ under the License.
             </repository>
             <repository>
                 <id>github</id>
-                <url>https://maven.pkg.github.com/shiyamsundark/java-maven-sample-war</url>
+                <url>https://maven.pkg.github.com/2115-27/java-maven-sample-war</url>
                 <snapshots>
                  <enabled>true</enabled>
                 </snapshots>
@@ -70,8 +70,8 @@ under the License.
        <servers>
          <server>
             <id>github</id>
-            <username>shiyamsundark</username>
-            <password>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</password>
+            <username>2115-27</username>
+            <password>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</password>
          </server>
        </servers>
   <!-- localRepository
