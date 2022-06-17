@@ -10,17 +10,18 @@
 	<url>https://github.com/shiyamsundark/</url>
 	
 	
-<!-- 
 	<issueManagement>
 		<url>https://github.com/shiyamsundark/issues</url>
 		<system>GitHub Issues</system>
-	</issueManagement> -->
+	</issueManagement>
+	
 
 	<scm>
 		<url>https://github.com/shiyamsundark</url>
 		<connection>scm:git:git://github.com/shiyamsundark/java-maven-ci.git</connection>
 		<developerConnection>scm:git:git@github.com/shiyamsundark/java-maven-ci.git</developerConnection>
 	</scm>
+	
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
