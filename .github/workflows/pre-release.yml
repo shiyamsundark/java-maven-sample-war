@@ -26,7 +26,7 @@ jobs:
       - id: versnid
         run: |
           echo setting release version!!
-          aws s3 cp s3://instidbucket1/version1/versionnew.cfg ${{ github.workspace }}/versions.cfg --region us-west-1  
+          aws s3 cp s3://instidbucket1/version1/versionnew.cfg ${{ github.workspace }}/versions.cfg --region us-east-2  
           echo "${{ github.run_number }}" >> versions.cfg
           newversion=$(cat versions.cfg)
           echo $newversion
