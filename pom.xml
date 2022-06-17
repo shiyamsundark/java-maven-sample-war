@@ -4,9 +4,11 @@
 
 	<groupId>com.github.shiyamsundark</groupId>
 	<artifactId>java-maven-sample-war-v1</artifactId>
-	<version>1.0.2</version>
+	<version>${snapshot.version}</version>
 	<name>maven-sample-war</name>
 	<packaging>war</packaging>
+	<url>https://github.com/shiyamsundark/</url>
+	
 	
 <!-- 
 	<issueManagement>
