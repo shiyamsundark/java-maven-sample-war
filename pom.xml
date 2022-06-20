@@ -3,30 +3,29 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.shiyamsundark</groupId>
-	<artifactId>java-maven-sample-war-v1</artifactId>
+	<artifactId>java-maven-sample-war-v2</artifactId>
 	<version>${snapshot.version}</version>
 	<name>maven-sample-war</name>
 	<packaging>war</packaging>
 	<url>https://github.com/shiyamsundark/</url>
-	
-	
+
 	<issueManagement>
 		<url>https://github.com/shiyamsundark/issues</url>
 		<system>GitHub Issues</system>
 	</issueManagement>
-	
 
 	<scm>
-		<url>https://github.com/shiyamsundark</url>
+		<url>https://github.com/shiyamsundark/</url>
 		<connection>scm:git:git://github.com/shiyamsundark/java-maven-ci.git</connection>
 		<developerConnection>scm:git:git@github.com/shiyamsundark/java-maven-ci.git</developerConnection>
 	</scm>
-	
 
 	<properties>
+		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.organization>shiyamsundark</sonar.organization>
                 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		
 	</properties>
 
 	
@@ -55,14 +54,19 @@
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
-	   </plugins>
+		       
+	    </plugins>
 	</build>
 	
- 	<distributionManagement>
-   	   <repository>
-     	     <id>github</id>
-             <name>GitHub shiyamsundark Apache Maven Packages</name>
-             <url>https://maven.pkg.github.com/shiyamsundark/java-maven-sample-war</url>
-   	   </repository>
-	</distributionManagement>
+	<distributionManagement>
+
+          <repository>
+	      <id>github</id>
+	      <name>shiyamsundark</name>
+	      <url>https://maven.pkg.github.com/shiyamsundark/java-maven-sample-war</url>
+          </repository>
+		
+        </distributionManagement>
+		  
+	
 </project>
