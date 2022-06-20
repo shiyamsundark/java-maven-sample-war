@@ -1,29 +1,32 @@
 name: Build
 on: 
   workflow_dispatch:
-
+  
 env:
-           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN  }}
-
+    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
+    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    
 jobs:
 
   Pre-Release:
     name: Pre-Release
     uses: ./.github/workflows/pre-release.yml
     secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+       
+    
   initializerunner:
     name: Intialize Runner
     needs: Pre-Release
     uses: ./.github/workflows/action.yml
-    secrets:
+    secrets: 
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+   
   Build:
        needs: [initializerunner,Pre-Release]
        runs-on: ${{ needs.initializerunner.outputs.activerunner }}
@@ -46,3 +49,4 @@ jobs:
             run: mvn deploy -Dsnapshot.version=${{needs.Pre-Release.outputs.currentversion}} -s $GITHUB_WORKSPACE/settings.xml
             env:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
