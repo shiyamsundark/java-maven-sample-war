@@ -10,9 +10,6 @@ jobs:
     name: Versioning
     runs-on: ubuntu-latest
     
-    outputs:
-    
-      versn: ${{ steps.versnid.outputs.versn }}
       
     steps:
       - uses: actions/checkout@v2
@@ -24,4 +21,4 @@ jobs:
           echo "${{ github.run_number }}" >> version.cfg
           newversion=$(cat version.cfg)
           echo $newversion
-          echo "::set-output name=versn::$newversion"
+          
