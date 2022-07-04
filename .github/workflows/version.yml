@@ -20,8 +20,8 @@ jobs:
       - id: versnid
         run: |
           echo setting release version!!
-          input='${{ github.workspace }}/versionnew.txt'
-          echo "${{ github.run_number }}" >> versionnew.tx
-          newversion=$(cat versionnew.tx)
+          input='${{ github.workspace }}/version.cfg'
+          echo "${{ github.run_number }}" >> version.cfg
+          newversion=$(cat version.cfg)
           echo $newversion
           echo "::set-output name=versn::$newversion"
