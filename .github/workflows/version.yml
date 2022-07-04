@@ -20,7 +20,7 @@ jobs:
       
         run: |
           echo setting release version!!
-          cd java-maven-sample-war 
+          input='${{github.workspace}}/versionnew.txt' 
           echo "${{ github.run_number }}" >> versionnew.txt
           newversion=$(cat versionnew.txt)
           echo $newversion
