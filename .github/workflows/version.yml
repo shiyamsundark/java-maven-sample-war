@@ -1,0 +1,27 @@
+name:  Build_POC
+
+on: 
+  workflow_dispatch:
+  
+jobs:
+
+  Pre-Release:
+  
+    name: Versioning
+    runs-on: ubuntu-latest
+    
+    outputs:
+      version: ${{ steps.versionid.outputs.version }}
+      
+    steps:
+      - uses: actions/checkout@v2
+        
+      - id: versionid
+      
+        run: |
+          echo setting release version!!
+          cd java-maven-sample-war 
+          echo "${{ github.run_number }}" >> versionnew.txt
+          newversion=$(cat versionnew.txt)
+          echo $newversion
+          echo "::set-output name=version::$newversion"
