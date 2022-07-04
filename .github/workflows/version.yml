@@ -11,17 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     
     outputs:
-      version: ${{ steps.versionid.outputs.version }}
+    
+      versn: ${{ steps.versnid.outputs.versn }}
       
     steps:
       - uses: actions/checkout@v2
         
-      - id: versionid
-      
+      - id: versnid
         run: |
           echo setting release version!!
-          input='${{github.workspace}}/versionnew.txt' 
-          echo "${{ github.run_number }}" >> versionnew.txt
-          newversion=$(cat versionnew.txt)
+          input='${{ github.workspace }}/versionnew.txt'
+          echo "${{ github.run_number }}" >> versionnew.tx
+          newversion=$(cat versionnew.tx)
           echo $newversion
-          echo "::set-output name=version::$newversion"
+          echo "::set-output name=versn::$newversion"
