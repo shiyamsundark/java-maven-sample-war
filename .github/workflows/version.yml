@@ -20,10 +20,7 @@ jobs:
           echo "${{ github.run_number }}" >> version.cfg
           newversion=$(cat version.cfg | tr -d "[:space:]")
           echo $newversion
-          name:  CPQ_Apps_Build
-
-
-          
+         
   Build:
   
        needs: Pre-Release
