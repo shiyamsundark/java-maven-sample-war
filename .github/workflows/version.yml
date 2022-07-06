@@ -7,45 +7,34 @@ jobs:
 
   Pre-Release:
   
-    name: Versioning
-    runs-on: ubuntu-latest
-    
-      
-    steps:
-      - uses: actions/checkout@v2
-        
-      - id: versnid
-        run: |
-          echo setting release version!!
-          echo "${{ github.run_number }}" >> version.cfg
-          newversion=$(cat version.cfg | tr -d "[:space:]")
-          echo $newversion
-         
+      name: Versioning
+      runs-on: ubuntu-latest
+
+
+      steps:
+        - uses: actions/checkout@v2
+
+        - id: versnid
+          run: |
+            echo setting release version!!
+            echo "${{ github.run_number }}" >> version.cfg
+            newversion=$(cat version.cfg | tr -d "[:space:]")
+            echo $newversion
+          
   Build:
-  
        needs: Pre-Release
        runs-on: windows-latest
        steps:
-         - name: Checkout
+         - name: Checkoutcode
            uses: actions/checkout@v3
          
-         - name: Setup DotNet
+         - name: Setup DotNet Core SDK
            uses: actions/setup-dotnet@v2
-           
-         - name: dotnetBuild
+           with: 
+               dotnet-version: 3.1.405
+          
+         - name: DotNet version
            shell : pwsh
            run: |
-              echo "Dotnet version to be used by default"
-              dotnet --version
-              dotnet --list-sdks
-              dotnet --info
-              dotnet new globaljson --sdk-version 3.1.405
-              
-              echo "Dotnet version to be used after setting to specific version"
-              dotnet --version
-               
-           
-             
-        
-
-          
+                echo "Dotnet version to be used after setting to specific version"
+                dotnet --version
