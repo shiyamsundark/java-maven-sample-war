@@ -34,7 +34,7 @@ jobs:
                dotnet-version: 3.1.405
           
          - name: DotNet version
-           shell : pwsh
+           
            run: |
                 echo "Dotnet version to be used after setting to specific version"
                 dotnet --version
