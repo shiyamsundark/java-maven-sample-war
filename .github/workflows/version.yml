@@ -1,5 +1,43 @@
 name:  Build_POC
 
+# on: 
+#   workflow_dispatch:
+  
+# jobs:
+
+#   Pre-Release:
+  
+#       name: Versioning
+#       runs-on: ubuntu-latest
+
+
+#       steps:
+#         - uses: actions/checkout@v2
+
+#         - id: versnid
+#           run: |
+#             echo setting release version!!
+#             echo "${{ github.run_number }}" >> version.cfg
+#             newversion=$(cat version.cfg | tr -d "[:space:]")
+#             echo $newversion
+          
+#   Build:
+#        needs: Pre-Release
+#        runs-on: windows-latest
+#        steps:
+#          - name: Checkoutcode
+#            uses: actions/checkout@v3
+         
+#          - name: Setup DotNet Core SDK
+#            uses: actions/setup-dotnet@v2
+#            with: 
+#                dotnet-version: 3.1.405
+          
+#          - name: DotNet version
+           
+#            run: |
+#                 echo "Dotnet version to be used after setting to specific version"
+#                 dotnet --version
 on: 
   workflow_dispatch:
   
@@ -9,32 +47,16 @@ jobs:
   
       name: Versioning
       runs-on: ubuntu-latest
-
-
+      outputs:
+        version: ${{ steps.versionid.outputs.version }}
+        
       steps:
         - uses: actions/checkout@v2
 
-        - id: versnid
+        - id: versionid
           run: |
             echo setting release version!!
             echo "${{ github.run_number }}" >> version.cfg
             newversion=$(cat version.cfg | tr -d "[:space:]")
             echo $newversion
-          
-  Build:
-       needs: Pre-Release
-       runs-on: windows-latest
-       steps:
-         - name: Checkoutcode
-           uses: actions/checkout@v3
-         
-         - name: Setup DotNet Core SDK
-           uses: actions/setup-dotnet@v2
-           with: 
-               dotnet-version: 3.1.405
-          
-         - name: DotNet version
-           
-           run: |
-                echo "Dotnet version to be used after setting to specific version"
-                dotnet --version
+            echo "::set-output name=version::$newversion"
