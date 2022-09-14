@@ -10,72 +10,68 @@ env:
     
 jobs:
 
-  Pre-Release:
+  Build:
     name: Pre-Release
     uses: ./.github/workflows/pre-release.yml
     
-  initializerunner:
+  Deploy:
     name: Intialize Runner
-    needs: Pre-Release
+    needs: Build
     uses: ./.github/workflows/action.yml
-    secrets: 
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#       GITHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
+
              
-  Build:
-       needs: [initializerunner,Pre-Release]
-       runs-on: ${{ needs.initializerunner.outputs.activerunner }}
-       steps:
-          - run: mvn clean verify
+#   Build:
+#        needs: [initializerunner,Pre-Release]
+#        runs-on: ${{ needs.initializerunner.outputs.activerunner }}
+#        steps:
+#           - run: mvn clean verify
     
-  Sonar:
-    needs: [Build,initializerunner]
-    runs-on: ${{ needs.initializerunner.outputs.activerunner }}
-    steps:   
-      - name: Sonar Analysis
-        run: mvn -B verify sonar:sonar -Dsonar.projectKey=shiyamsundark_java-maven-sample-war -Dsonar.organization=shiyamsundark -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN     
+#   Sonar:
+#     needs: [Build,initializerunner]
+#     runs-on: ${{ needs.initializerunner.outputs.activerunner }}
+#     steps:   
+#       - name: Sonar Analysis
+#         run: mvn -B verify sonar:sonar -Dsonar.projectKey=shiyamsundark_java-maven-sample-war -Dsonar.organization=shiyamsundark -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN     
         
-#   PublishartifactonGitHubPackages:
-#         needs: [Build,initializerunner,Sonar]
-#         runs-on: ${{ needs.initializerunner.outputs.activerunner }}
-#         permissions: 
-#           contents: read
-#           packages: write
-#         steps:
-#           - uses: actions/checkout@v3
-#           - uses: actions/setup-java@v3
-#             with:
-#               java-version: '11'
-#               distribution: 'adopt'
-#           - name: Publish package
-#             run: mvn --batch-mode deploy
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GIHUB_TOKEN }}
+# #   PublishartifactonGitHubPackages:
+# #         needs: [Build,initializerunner,Sonar]
+# #         runs-on: ${{ needs.initializerunner.outputs.activerunner }}
+# #         permissions: 
+# #           contents: read
+# #           packages: write
+# #         steps:
+# #           - uses: actions/checkout@v3
+# #           - uses: actions/setup-java@v3
+# #             with:
+# #               java-version: '11'
+# #               distribution: 'adopt'
+# #           - name: Publish package
+# #             run: mvn --batch-mode deploy
+# #         env:
+# #           GITHUB_TOKEN: ${{ secrets.GIHUB_TOKEN }}
           
-  Fortify:
-    needs: [initializerunner,Pre-Release]
-    runs-on: ubuntu-latest
-    steps:    
-      - name: Fortify Analysis
-        run: echo Starting Fortify stage!!
+#   Fortify:
+#     needs: [initializerunner,Pre-Release]
+#     runs-on: ubuntu-latest
+#     steps:    
+#       - name: Fortify Analysis
+#         run: echo Starting Fortify stage!!
         
-  Post-Release:
-    name: Post-Release
-    needs: [initializerunner,Pre-Release,Build,Sonar,Fortify]
-    uses: ./.github/workflows/post-release.yml  
+#   Post-Release:
+#     name: Post-Release
+#     needs: [initializerunner,Pre-Release,Build,Sonar,Fortify]
+#     uses: ./.github/workflows/post-release.yml  
       
-  Declarative-Post-Actions:
-    needs: [Post-Release]
-    runs-on: ubuntu-latest
-    steps:    
-      - name: Sent Results
-        run: echo Mailing results to recipients!!        
+#   Declarative-Post-Actions:
+#     needs: [Post-Release]
+#     runs-on: ubuntu-latest
+#     steps:    
+#       - name: Sent Results
+#         run: echo Mailing results to recipients!!        
   
-  stop_runner:
-    needs: [ Build, initializerunner,Sonar,Pre-Release,Post-Release,Declarative-Post-Actions]
-    runs-on: ubuntu-latest
-    steps:
-        - name: stopping Runners
-          run: aws ec2 stop-instances --instance-ids ${{ needs.initializerunner.outputs.activerunner }} --region us-west-2
+#   stop_runner:
+#     needs: [ Build, initializerunner,Sonar,Pre-Release,Post-Release,Declarative-Post-Actions]
+#     runs-on: ubuntu-latest
+#     steps:
+#         - name: stopping Runners
+#           run: aws ec2 stop-instances --instance-ids ${{ needs.initializerunner.outputs.activerunner }} --region us-west-2
